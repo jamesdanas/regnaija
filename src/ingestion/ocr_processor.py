@@ -56,8 +56,8 @@ class OCRProcessor:
             version = pytesseract.get_tesseract_version()
             print(f"  Tesseract available: {version}")
         except Exception:
-            print("  ⚠️  Tesseract not found — OCR will fail on scanned PDFs")
-            print("  Fix: sudo apt install tesseract-ocr")
+            print("⚠️Tesseract not found — OCR will fail on scanned PDFs")
+            print("Fix: sudo apt install tesseract-ocr")
 
     def _extract_with_pypdf(self, pdf_path: str) -> Tuple[str, int]:
         """
@@ -88,7 +88,7 @@ class OCRProcessor:
 
         pages = []
         for i, image in enumerate(images):
-            print(f"    OCR page {i+1}/{len(images)}...")
+            print(f"OCR page {i+1}/{len(images)}...")
 
             # Preprocess image for better OCR
             image = self._preprocess_image(image)
@@ -105,13 +105,24 @@ class OCRProcessor:
 
     def _preprocess_image(self, image: Image.Image) -> Image.Image:
         """
-        Basic image preprocessing to improve OCR accuracy.
-        Converts to grayscale — sufficient for most government docs.
+        Advanced image preprocessing to defeat government stamps and noise.
+        Uses Grayscale + Threshold Binarization.
         """
-        # Convert to grayscale
+        # Step 1: Convert to grayscale (neutralizes red/blue ink from stamps)
         if image.mode != 'L':
             image = image.convert('L')
-        return image
+            
+        # Step 2: Apply Binarization (Thresholding)
+        # Any pixel lighter than the threshold turns pure white (255)
+        # Any pixel darker than the threshold turns pure black (0)
+        # Nigerian government stamps are usually lighter than the printed black text.
+        # A threshold of ~150 to 180 usually washes out the stamp entirely.
+        threshold = 160 
+        
+        # The lambda function evaluates every single pixel in the image
+        binarized_image = image.point(lambda p: 255 if p > threshold else 0)
+        
+        return binarized_image
 
     def _calculate_quality_score(self, text: str, page_count: int) -> float:
         """
@@ -208,8 +219,8 @@ class OCRProcessor:
         # Step 4: Score quality
         quality = self._calculate_quality_score(clean_text, page_count)
 
-        print(f"  Pages: {page_count} | OCR used: {was_ocr} | Quality: {quality:.0%}")
-        print(f"  Extracted {len(clean_text):,} characters")
+        print(f"Pages: {page_count} | OCR used: {was_ocr} | Quality: {quality:.0%}")
+        print(f"Extracted {len(clean_text):,} characters")
 
         return ProcessedDocument(
             text=clean_text,
@@ -244,8 +255,8 @@ class OCRProcessor:
                 doc = self.process(str(pdf_path))
                 results.append(doc)
             except Exception as e:
-                print(f"  ❌ Failed: {pdf_path.name} — {e}")
+                print(f"Failed: {pdf_path.name} — {e}")
                 continue
 
-        print(f"\n✅ Processed {len(results)}/{len(pdfs)} documents from {agency}")
+        print(f"\nProcessed {len(results)}/{len(pdfs)} documents from {agency}")
         return results

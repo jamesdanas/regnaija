@@ -1,15 +1,32 @@
 """
 src/ingestion/legal_chunker.py
+
+WHY THIS EXISTS:
+Normal chunkers split at character count — they will cut a sentence like:
+"The penalty for late filing shall be..." mid-clause, destroying its meaning.
+
+Nigerian legal documents have a very specific structure:
+  PART I
+  Section 1.
+  Section 1.1
+  (a), (b), (c) sub-clauses
+  "Provided that..."
+  "Notwithstanding..."
+
+This chunker detects those boundaries and NEVER splits mid-clause.
+Every chunk keeps its section number intact — which is what makes
+zero-hallucination citations possible.
 """
 
 import re
-from typing import List, Tuple
+from typing import List, Dict, Tuple
 from dataclasses import dataclass
 from langchain_core.documents import Document
 
 
 @dataclass
 class LegalChunk:
+    """A single legal chunk with full metadata."""
     text: str
     section_number: str
     section_title: str
@@ -24,19 +41,27 @@ class LegalChunk:
 
 
 class NigerianLegalChunker:
+    """
+    Chunks Nigerian regulatory documents by legal structure.
 
+    Keeps section numbers, clause letters, and legal phrases intact.
+    Never splits mid-clause. Every chunk is fully self-contained.
+    """
+
+    # Regex patterns for Nigerian legal document structure
     SECTION_PATTERNS = [
-        r'^(PART\s+[IVXLCDM]+[\.\s])',
-        r'^(PART\s+\d+[\.\s])',
-        r'^(Chapter\s+\d+[\.\s])',
-        r'^(Section\s+\d+[\.\d]*[\.\s])',
-        r'^(\d+\.\d+[\.\d]*\s)',
-        r'^(\d+\.\s+[A-Z])',
-        r'^(Article\s+\d+[\.\s])',
-        r'^(Schedule\s+[IVXLCDM\d]+[\.\s])',
-        r'^(Regulation\s+\d+[\.\s])',
+        r'^(PART\s+[IVXLCDM]+[\.\s])',           # PART I, PART II
+        r'^(PART\s+\d+[\.\s])',                    # PART 1, PART 2
+        r'^(Chapter\s+\d+[\.\s])',                 # Chapter 1
+        r'^(Section\s+\d+[\.\d]*[\.\s])',          # Section 1, Section 1.1
+        r'^(\d+\.\d+[\.\d]*\s)',                   # 1.1, 1.1.1
+        r'^(\d+\.\s+[A-Z])',                       # 1. TITLE
+        r'^(Article\s+\d+[\.\s])',                 # Article 1
+        r'^(Schedule\s+[IVXLCDM\d]+[\.\s])',       # Schedule I
+        r'^(Regulation\s+\d+[\.\s])',              # Regulation 1
     ]
 
+    # Legal transition phrases — never split after these
     LEGAL_BRIDGES = [
         r'provided that',
         r'notwithstanding',
@@ -70,6 +95,11 @@ class NigerianLegalChunker:
         )
 
     def _detect_section_number(self, text: str) -> Tuple[str, str]:
+        """
+        Extracts section number and title from the start of a text block.
+        Returns (section_number, remaining_title)
+        """
+        # Try each pattern
         patterns = [
             r'^(PART\s+[IVXLCDM\d]+)',
             r'^(Section\s+[\d\.]+)',
@@ -83,12 +113,18 @@ class NigerianLegalChunker:
             match = re.match(pattern, text.strip(), re.IGNORECASE)
             if match:
                 section_num = match.group(1).strip()
+                # Get title — first line after section number
                 remaining = text[match.end():].strip()
                 title_line = remaining.split('\n')[0].strip()[:80]
                 return section_num, title_line
+
         return "General", text[:50].strip()
 
-    def _split_into_sections(self, text: str) -> List[dict]:
+    def _split_into_sections(self, text: str) -> List[Dict]:
+        """
+        Splits document text into logical sections based on
+        detected legal structure markers.
+        """
         lines = text.split('\n')
         sections = []
         current_section_lines = []
@@ -100,9 +136,11 @@ class NigerianLegalChunker:
                 current_section_lines.append(line)
                 continue
 
+            # Check if this line starts a new section
             is_new_section = bool(self.section_regex.match(stripped))
 
             if is_new_section and current_section_lines:
+                # Save the current section
                 section_text = '\n'.join(current_section_lines).strip()
                 if len(section_text) >= self.min_chunk_size:
                     sections.append({
@@ -114,6 +152,7 @@ class NigerianLegalChunker:
             else:
                 current_section_lines.append(line)
 
+        # Don't forget the last section
         if current_section_lines:
             section_text = '\n'.join(current_section_lines).strip()
             if len(section_text) >= self.min_chunk_size:
@@ -125,22 +164,29 @@ class NigerianLegalChunker:
         return sections
 
     def _split_large_section(self, section_text: str) -> List[str]:
+        """
+        Splits a section that's too large into smaller pieces.
+        Respects sub-clause boundaries — never splits mid-sentence
+        if that sentence contains a legal bridge phrase.
+        """
         if len(section_text) <= self.max_chunk_size:
             return [section_text]
 
         chunks = []
+        # Split on sub-clause markers: (a), (b), (i), (ii)
         sub_clause_pattern = re.compile(
             r'(?=\n\s*\([a-z]{1,3}\)\s)',
             re.IGNORECASE
         )
         parts = sub_clause_pattern.split(section_text)
-        current_chunk = ""
 
+        current_chunk = ""
         for part in parts:
             if len(current_chunk) + len(part) <= self.max_chunk_size:
                 current_chunk += part
             else:
                 if current_chunk.strip():
+                    # Don't break if ends with a legal bridge phrase
                     ends_with_bridge = self.bridge_regex.search(
                         current_chunk[-200:]
                     )
@@ -148,6 +194,7 @@ class NigerianLegalChunker:
                         current_chunk += part
                     else:
                         chunks.append(current_chunk.strip())
+                        # Add overlap from end of previous chunk
                         overlap = current_chunk[-self.overlap_size:]
                         current_chunk = overlap + part
                 else:
@@ -167,7 +214,13 @@ class NigerianLegalChunker:
         publication_date: str = "",
         page_number: int = 0,
     ) -> List[LegalChunk]:
+        """
+        Main method. Takes raw document text and returns
+        a list of LegalChunk objects with full metadata.
+        """
         print(f"\n  Chunking: {document_name}")
+
+        # Split into logical sections first
         sections = self._split_into_sections(text)
         print(f"  Detected {len(sections)} legal sections")
 
@@ -175,9 +228,12 @@ class NigerianLegalChunker:
         chunk_index = 0
 
         for section in sections:
+            # Detect section number from header
             section_num, section_title = self._detect_section_number(
                 section['header']
             )
+
+            # Split large sections further
             sub_chunks = self._split_large_section(section['text'])
 
             for sub_chunk in sub_chunks:
@@ -212,6 +268,10 @@ class NigerianLegalChunker:
         self,
         chunks: List[LegalChunk]
     ) -> List[Document]:
+        """
+        Converts LegalChunk objects to LangChain Document objects
+        for use with the vector store.
+        """
         documents = []
         for chunk in chunks:
             documents.append(Document(
