@@ -138,7 +138,7 @@ class AnswerGenerator:
         context = format_context_for_llm(retrieved)
 
         # Build citations
-        citations     = build_citations(retrieved)
+        citations = build_citations(retrieved)
         citations_str = format_citations(citations)
 
         # Calculate confidence

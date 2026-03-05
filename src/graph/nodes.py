@@ -33,7 +33,7 @@ def get_llm():
     return ChatGroq(
         model = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
         temperature = 0,
-        max_tokens = 2048,
+        max_tokens = 1024,
     )
 
 
@@ -152,9 +152,9 @@ def retrieval_agent(state: NaijaCodexState, store) -> NaijaCodexState:
 
         # Deduplicate by doc_id + section_number
         for doc, score in results:
-            doc_id    = doc.metadata.get("doc_id", "")
-            section   = doc.metadata.get("section_number", "")
-            text_key  = doc.page_content[:50]
+            doc_id = doc.metadata.get("doc_id", "")
+            section = doc.metadata.get("section_number", "")
+            text_key = doc.page_content[:50]
             dedup_key = f"{doc_id}_{section}_{text_key}"
             if dedup_key not in seen_ids:
                 seen_ids.add(dedup_key)

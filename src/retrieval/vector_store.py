@@ -34,7 +34,7 @@ class NaijaCodexVectorStore:
         self.pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
         self._ensure_index()
         self.index = self.pc.Index(self.index_name)
-        print(f"  ✅ Connected to Pinecone index: {self.index_name}")
+        print(f"Connected to Pinecone index: {self.index_name}")
 
     def _ensure_index(self):
         """Creates the Pinecone index if it doesn't exist."""
@@ -53,9 +53,9 @@ class NaijaCodexVectorStore:
             )
             print("  Waiting for index to be ready...")
             time.sleep(15)
-            print("  ✅ Index ready")
+            print("Index ready")
         else:
-            print(f"  Index '{self.index_name}' already exists")
+            print(f"Index '{self.index_name}' already exists")
 
     def upsert_chunks(
         self,
@@ -89,24 +89,24 @@ class NaijaCodexVectorStore:
                     "values": embedding,
                     "metadata": {
                         # Text for retrieval
-                        "text":             doc.page_content[:1000],
+                        "text": doc.page_content[:1000],
                         # Legal citation metadata
-                        "agency":           meta.get("agency", "UNKNOWN"),
-                        "document_name":    meta.get("document_name", ""),
-                        "section_number":   meta.get("section_number", ""),
-                        "section_title":    meta.get("section_title", ""),
+                        "agency": meta.get("agency", "UNKNOWN"),
+                        "document_name": meta.get("document_name", ""),
+                        "section_number": meta.get("section_number", ""),
+                        "section_title": meta.get("section_title", ""),
                         "publication_date": meta.get("publication_date", ""),
-                        "source_url":       meta.get("source_url", ""),
-                        "doc_id":           meta.get("doc_id", ""),
-                        "page_number":      meta.get("page_number", 0),
-                        "chunk_index":      meta.get("chunk_index", 0),
+                        "source_url": meta.get("source_url", ""),
+                        "doc_id": meta.get("doc_id", ""),
+                        "page_number": meta.get("page_number", 0),
+                        "chunk_index": meta.get("chunk_index", 0),
                     }
                 })
 
             # Upsert to Pinecone
             self.index.upsert(vectors=vectors)
             total_upserted += len(vectors)
-            print(f"  ✅ Upserted {total_upserted}/{len(documents)} chunks")
+            print(f"Upserted {total_upserted}/{len(documents)} chunks")
 
         return total_upserted
 
@@ -150,14 +150,14 @@ class NaijaCodexVectorStore:
             doc = Document(
                 page_content=match.metadata.get("text", ""),
                 metadata={
-                    "agency":           match.metadata.get("agency", ""),
-                    "document_name":    match.metadata.get("document_name", ""),
-                    "section_number":   match.metadata.get("section_number", ""),
-                    "section_title":    match.metadata.get("section_title", ""),
+                    "agency": match.metadata.get("agency", ""),
+                    "document_name": match.metadata.get("document_name", ""),
+                    "section_number": match.metadata.get("section_number", ""),
+                    "section_title": match.metadata.get("section_title", ""),
                     "publication_date": match.metadata.get("publication_date", ""),
-                    "source_url":       match.metadata.get("source_url", ""),
-                    "doc_id":           match.metadata.get("doc_id", ""),
-                    "score":            match.score,
+                    "source_url": match.metadata.get("source_url", ""),
+                    "doc_id": match.metadata.get("doc_id", ""),
+                    "score": match.score,
                 }
             )
             documents.append((doc, match.score))
@@ -193,6 +193,6 @@ class NaijaCodexVectorStore:
         stats = self.index.describe_index_stats()
         return {
             "total_vectors": stats.total_vector_count,
-            "dimension":     stats.dimension,
-            "index_name":    self.index_name,
+            "dimension": stats.dimension,
+            "index_name": self.index_name,
         }

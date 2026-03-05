@@ -277,16 +277,16 @@ class NigerianLegalChunker:
             documents.append(Document(
                 page_content=chunk.text,
                 metadata={
-                    "chunk_id":         chunk.chunk_id,
-                    "chunk_index":      chunk.chunk_index,
-                    "section_number":   chunk.section_number,
-                    "section_title":    chunk.section_title,
-                    "parent_section":   chunk.parent_section,
-                    "agency":           chunk.agency,
-                    "document_name":    chunk.document_name,
-                    "source_url":       chunk.source_url,
+                    "chunk_id": chunk.chunk_id,
+                    "chunk_index": chunk.chunk_index,
+                    "section_number": chunk.section_number,
+                    "section_title": chunk.section_title,
+                    "parent_section": chunk.parent_section,
+                    "agency": chunk.agency,
+                    "document_name": chunk.document_name,
+                    "source_url": chunk.source_url,
                     "publication_date": chunk.publication_date,
-                    "page_number":      chunk.page_number,
+                    "page_number": chunk.page_number,
                 }
             ))
         return documents
