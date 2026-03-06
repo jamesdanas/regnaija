@@ -177,16 +177,13 @@ REGULATORY_SIGNALS = [
 
 def _is_casual(text: str) -> bool:
     t = text.lower().strip().rstrip("!?.,")
+
+    # If ANY regulatory keyword is present, always go to RAG
     if any(sig in t for sig in REGULATORY_SIGNALS):
         return False
-    words = t.split()
-    if len(words) <= 3:
-        return True
-    if len(words) <= 8:
-        for trigger in CASUAL_TRIGGERS:
-            if trigger in t:
-                return True
-    return False
+
+    # No regulatory signal found — treat as casual regardless of length
+    return True
 
 def _casual_reply(question: str) -> str:
     from langchain_groq import ChatGroq
@@ -226,16 +223,13 @@ REGULATORY_SIGNALS = [
 
 def _is_casual(text: str) -> bool:
     t = text.lower().strip().rstrip("!?.,")
+
+    # If ANY regulatory keyword is present, always go to RAG
     if any(sig in t for sig in REGULATORY_SIGNALS):
         return False
-    words = t.split()
-    if len(words) <= 3:
-        return True
-    if len(words) <= 8:
-        for trigger in CASUAL_TRIGGERS:
-            if trigger in t:
-                return True
-    return False
+
+    # No regulatory signal found — treat as casual regardless of length
+    return True
 
 def _casual_reply(question: str) -> str:
     from langchain_groq import ChatGroq
