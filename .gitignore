@@ -16,3 +16,5 @@ data/documents/**/*.txt
 data/processed/
 results/
 upload_to_pinecone.py
+*.swp
+*.swo
