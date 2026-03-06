@@ -131,6 +131,18 @@ def _is_casual(text: str) -> bool:
     return False
 
 
+    # Short message — check if it contains any casual trigger
+    if len(words) <= 8:
+        for trigger in CASUAL_TRIGGERS:
+            if trigger in t:
+                return True
+        # Pure short messages with no regulatory content are casual
+        if len(words) <= 3:
+            return True
+
+    return False
+
+
 def _casual_reply(question: str) -> str:
     from langchain_groq import ChatGroq
     from langchain_core.messages import SystemMessage, HumanMessage
@@ -196,10 +208,71 @@ def _casual_reply(question: str) -> str:
     resp = llm.invoke([SystemMessage(content=system), HumanMessage(content=question)])
     return resp.content.strip()
 
+
+CASUAL_TRIGGERS = [
+    "hi", "hello", "hey", "good morning", "good afternoon", "good evening",
+    "how are you", "who are you", "what are you", "what is naijacodex",
+    "thanks", "thank you", "okay", "ok", "bye", "goodbye", "great", "nice",
+    "i am", "my name is", "i'm", "lol", "haha", "cool", "awesome",
+    "what can you do", "what do you do",
+]
+
+REGULATORY_SIGNALS = [
+    "cbn", "sec", "ndpc", "nrs", "nitda", "bank", "tax", "regulation",
+    "compliance", "license", "penalty", "fintech", "data protection",
+    "capital", "securities", "requirement", "obligation", "law", "act",
+    "section", "policy", "framework", "guideline", "filing", "cybersecurity",
+]
+
+def _is_casual(text: str) -> bool:
+    t = text.lower().strip().rstrip("!?.,")
+    if any(sig in t for sig in REGULATORY_SIGNALS):
+        return False
+    words = t.split()
+    if len(words) <= 3:
+        return True
+    if len(words) <= 8:
+        for trigger in CASUAL_TRIGGERS:
+            if trigger in t:
+                return True
+    return False
+
+def _casual_reply(question: str) -> str:
+    from langchain_groq import ChatGroq
+    from langchain_core.messages import SystemMessage, HumanMessage
+    import os
+    llm = ChatGroq(
+        model       = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+        temperature = 0.7,
+        max_tokens  = 120,
+    )
+    system = (
+        "You are NaijaCodex, a warm and professional AI assistant specialising in "
+        "Nigerian regulatory and compliance law covering CBN, SEC, NDPC, NRS, and NITDA. "
+        "For greetings and small talk, respond naturally in 1-3 sentences only. "
+        "If the user introduces themselves, greet them warmly by name. "
+        "Never output regulatory format, citations, or sources for casual messages. "
+        "Always invite them to ask a compliance question."
+    )
+    resp = llm.invoke([SystemMessage(content=system), HumanMessage(content=question)])
+    return resp.content.strip()
+
 def query_naijacodex(question, history):
     if not question or not question.strip():
         return history, ""
     try:
+        # Handle casual messages — no Pinecone, no citations
+        if _is_casual(question.strip()):
+            answer  = _casual_reply(question.strip())
+            history = list(history or [])
+            history.append((question, answer))
+            sid = current_sid[0]
+            if sid not in sessions:
+                sessions[sid] = []
+                session_labels[sid] = question
+            sessions[sid].append((question, answer))
+            return history, ""
+
         # Handle casual messages — no Pinecone, no citations
         if _is_casual(question.strip()):
             answer  = _casual_reply(question.strip())
