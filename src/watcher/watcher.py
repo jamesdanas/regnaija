@@ -221,13 +221,13 @@ class DocumentIngester:
             from langchain.schema import Document
 
             embedder = NaijaCodexEmbedder()
-            store    = NaijaCodexVectorStore(embedder=embedder)
-            chunker  = NigerianLegalChunker()
+            store = NaijaCodexVectorStore(embedder=embedder)
+            chunker = NigerianLegalChunker()
 
             # Read PDF text
             import pypdf
             reader = pypdf.PdfReader(str(pdf_path))
-            text   = "\n".join(
+            text = "\n".join(
                 page.extract_text() or "" for page in reader.pages
             )
 
@@ -237,19 +237,19 @@ class DocumentIngester:
 
             # Chunk it
             legal_chunks = chunker.chunk_document(
-                text            = text,
-                agency          = metadata.get("agency", ""),
-                document_name   = metadata.get("document_name", ""),
-                source_url      = metadata.get("source_url", ""),
-                publication_date= metadata.get("publication_date", ""),
+                text = text,
+                agency = metadata.get("agency", ""),
+                document_name = metadata.get("document_name", ""),
+                source_url = metadata.get("source_url", ""),
+                publication_date = metadata.get("publication_date", ""),
             )
             chunks = chunker.chunks_to_documents(legal_chunks)
             store.upsert_chunks(chunks)
-            log.info(f"  Ingested {len(chunks)} chunks into Pinecone")
+            log.info(f"Ingested {len(chunks)} chunks into Pinecone")
             return True
 
         except Exception as e:
-            log.error(f"  Ingestion failed: {e}")
+            log.error(f"Ingestion failed: {e}")
             return False
 
 
@@ -257,9 +257,9 @@ class NaijaCodexWatcher:
     """Main watcher service — orchestrates all agency watchers."""
 
     def __init__(self):
-        self.registry  = DocumentRegistry(REGISTRY_PATH)
-        self.ingester  = DocumentIngester()
-        self.watchers  = [
+        self.registry = DocumentRegistry(REGISTRY_PATH)
+        self.ingester = DocumentIngester()
+        self.watchers = [
             AgencyWatcher(target, self.registry)
             for target in WATCH_TARGETS
         ]
@@ -280,9 +280,9 @@ class NaijaCodexWatcher:
 
                 if pdf_path:
                     success = self.ingester.ingest(pdf_path, {
-                        "agency":           doc["agency"],
-                        "document_name":    doc["title"],
-                        "source_url":       doc["url"],
+                        "agency": doc["agency"],
+                        "document_name": doc["title"],
+                        "source_url": doc["url"],
                         "publication_date": datetime.now().strftime("%Y-%m-%d"),
                     })
                     if success:

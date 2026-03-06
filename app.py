@@ -25,10 +25,10 @@ EXAMPLES = [
     "Rights of data subjects under NDPA 2023?",
 ]
 
-sessions = {}
+sessions       = {}
 session_labels = {}
-current_sid = ["session_1"]
-counter = [1]
+current_sid    = ["session_1"]
+counter        = [1]
 
 
 def _new_sid():
@@ -87,6 +87,66 @@ def _clean_answer(text):
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
+CASUAL_SYSTEM = (
+    "You are NaijaCodex, a warm and professional AI assistant specialising in "
+    "Nigerian regulatory and compliance law (CBN, SEC, NDPC, NRS, NITDA). "
+    "For greetings and small talk, respond naturally and briefly in 1-3 sentences. "
+    "Do NOT use any regulatory format or cite sources for casual messages. "
+    "If the user introduces themselves, acknowledge them warmly by name. "
+    "Always gently invite them to ask a compliance question."
+)
+
+CASUAL_TRIGGERS = [
+    "hi", "hello", "hey", "good morning", "good afternoon", "good evening",
+    "how are you", "who are you", "what are you", "what is naijacodex",
+    "thanks", "thank you", "okay", "ok", "bye", "goodbye", "great", "nice",
+    "i am", "my name is", "i'm", "lol", "haha", "cool", "awesome",
+    "what can you do", "help me", "what do you do",
+]
+
+def _is_casual(text: str) -> bool:
+    t = text.lower().strip().rstrip("!?.,")
+    words = t.split()
+
+    # Always casual if very short and no regulatory keywords
+    regulatory_signals = [
+        "cbn", "sec", "ndpc", "nrs", "nitda", "bank", "tax", "regulation",
+        "compliance", "license", "penalty", "fintech", "data protection",
+        "capital", "securities", "requirement", "obligation", "law", "act",
+        "section", "policy", "framework", "guideline", "filing",
+    ]
+    has_regulatory = any(sig in t for sig in regulatory_signals)
+    if has_regulatory:
+        return False
+
+    # Short message — check if it contains any casual trigger
+    if len(words) <= 8:
+        for trigger in CASUAL_TRIGGERS:
+            if trigger in t:
+                return True
+        # Pure short messages with no regulatory content are casual
+        if len(words) <= 3:
+            return True
+
+    return False
+
+
+def _casual_reply(question: str) -> str:
+    from langchain_groq import ChatGroq
+    from langchain_core.messages import SystemMessage, HumanMessage
+    import os
+    llm = ChatGroq(
+        model       = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+        temperature = 0.7,
+        max_tokens  = 120,
+    )
+    resp = llm.invoke([
+        SystemMessage(content=CASUAL_SYSTEM),
+        HumanMessage(content=question),
+    ])
+    return resp.content.strip()
+
+
 
 CASUAL_TRIGGERS = [
     "hi", "hello", "hey", "good morning", "good afternoon", "good evening",
@@ -105,13 +165,16 @@ REGULATORY_SIGNALS = [
 
 def _is_casual(text: str) -> bool:
     t = text.lower().strip().rstrip("!?.,")
-
-    # If ANY regulatory keyword is present, always go to RAG
     if any(sig in t for sig in REGULATORY_SIGNALS):
         return False
-
-    # No regulatory signal found — treat as casual regardless of length
-    return True
+    words = t.split()
+    if len(words) <= 3:
+        return True
+    if len(words) <= 8:
+        for trigger in CASUAL_TRIGGERS:
+            if trigger in t:
+                return True
+    return False
 
 def _casual_reply(question: str) -> str:
     from langchain_groq import ChatGroq
@@ -149,31 +212,26 @@ def query_naijacodex(question, history):
             sessions[sid].append((question, answer))
             return history, ""
 
-        import threading
-        result_holder = [None]
-        error_holder  = [None]
-        def _run():
-            try:
-                result_holder[0] = pipeline.query(question.strip())
-            except Exception as e:
-                error_holder[0] = e
-        t = threading.Thread(target=_run)
-        t.start()
-        t.join(timeout=40)
-        if t.is_alive() or result_holder[0] is None:
+        # Handle casual messages without touching Pinecone
+        if _is_casual(question.strip()):
+            answer  = _casual_reply(question.strip())
             history = list(history or [])
-            history.append((question, 'Sorry, that query timed out. Please try a more specific regulatory question, e.g. \'What are CBN requirements for fintechs?\' '))
-            return history, ''
-        if error_holder[0]:
-            raise error_holder[0]
-        result = result_holder[0]
-        raw_ans = result.get("answer", "No answer generated.")
-        raw_cit = result.get("citations", "")
-        conf = result.get("confidence", "")
+            history.append((question, answer))
+            sid = current_sid[0]
+            if sid not in sessions:
+                sessions[sid] = []
+                session_labels[sid] = question
+            sessions[sid].append((question, answer))
+            return history, ""
+
+        result   = pipeline.query(question.strip())
+        raw_ans  = result.get("answer", "No answer generated.")
+        raw_cit  = result.get("citations", "")
+        conf     = result.get("confidence", "")
         agencies = ", ".join(result.get("agencies_searched", []))
-        chunks = len(result.get("retrieved_docs", []))
-        qid = result.get("query_id", "")
-        latency = result.get("latency_ms", 0)
+        chunks   = len(result.get("retrieved_docs", []))
+        qid      = result.get("query_id", "")
+        latency  = result.get("latency_ms", 0)
         conflict = result.get("conflicts_found", False)
 
         clean = _clean_answer(raw_ans)
@@ -190,7 +248,7 @@ def query_naijacodex(question, history):
                     + "\n".join(lines)
                 )
 
-        conflict_note = " · Conflict" if conflict else ""
+        conflict_note = " · ⚠️ Conflict" if conflict else ""
         meta = (
             f"\n\n<small style='color:#444'>"
             f"{qid} · {agencies} · {chunks} chunks · "
@@ -207,12 +265,6 @@ def query_naijacodex(question, history):
             session_labels[sid] = question
         sessions[sid].append((question, full_answer))
 
-    except TimeoutError:
-        history = list(history or [])
-        history.append((question,
-            "Sorry, that query took too long. Please try a more specific question, "
-            "e.g. \'What are CBN requirements for setting up a fintech company?\'"
-        ))
     except Exception as e:
         history = list(history or [])
         history.append((question, f"Error: {str(e)}"))
@@ -335,15 +387,15 @@ with gr.Blocks(title="NaijaCodex", theme=gr.themes.Base(), css=CSS) as demo:
 
     with gr.Row(equal_height=True):
 
-        # Toggle rail — always visible 
+        # ── Toggle rail — always visible ──────
         with gr.Column(scale=0, min_width=48, elem_id="toggle-col"):
             toggle_btn = gr.Button("◀", elem_id="toggle-btn")
 
-        # Sidebar content — collapsible 
+        # ── Sidebar content — collapsible ─────
         with gr.Column(scale=1, elem_id="sidebar-col", visible=True) as sidebar_col:
             new_chat_btn = gr.Button("+ New Chat", elem_id="new-chat-btn")
             gr.Markdown("---")
-            gr.Markdown("**Coverage**\n\n CBN\n\n SEC\n\n NDPC\n\n NRS\n\n NITDA")
+            gr.Markdown("**Coverage**\n\n🏦 CBN\n\n📈 SEC\n\n🔒 NDPC\n\n💰 NRS\n\n💻 NITDA")
             gr.Markdown("---")
             gr.Markdown("**Load Conversation**")
             gr.Markdown("<small>Paste a session ID to reload.</small>")
@@ -357,11 +409,11 @@ with gr.Blocks(title="NaijaCodex", theme=gr.themes.Base(), css=CSS) as demo:
             gr.Markdown("**Recent Conversations**")
             sidebar_history = gr.Markdown("*No conversations yet.*")
 
-        #  Main 
+        # ── Main ─────────────────────────────
         with gr.Column(scale=4):
             gr.HTML("""
             <div style='text-align:center; padding:28px 0 12px;'>
-                <h1 style='font-size:1.9rem; font-weight:700; margin:0;'> NaijaCodex</h1>
+                <h1 style='font-size:1.9rem; font-weight:700; margin:0;'>🏛️ NaijaCodex</h1>
                 <p style='color:#777; font-size:13px; margin:6px 0 0;'>Nigerian Regulatory Intelligence Platform</p>
                 <p style='color:#444; font-size:11px; margin:4px 0 0;'>CBN · SEC · NDPC · NRS · NITDA</p>
             </div>
@@ -395,7 +447,8 @@ with gr.Blocks(title="NaijaCodex", theme=gr.themes.Base(), css=CSS) as demo:
             </div>
             """)
 
-    # Events 
+    # ── Events ───────────────────────────────
+
     def respond(question, history):
         h, q = query_naijacodex(question, history)
         return h, q, _build_sidebar_html()
