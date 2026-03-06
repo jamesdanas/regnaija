@@ -1,7 +1,98 @@
 {
-  "documents": {},
+  "documents": {
+    "https://home.sec.gov.ng/documents/1385/APPROVED_RULES_ON_CREDIT_ENHANCEMENT_FACILITY_PROVIDERS2_g9yubf1.pdf": {
+      "ingested_at": "2026-03-06T08:20:20.540901",
+      "url": "https://home.sec.gov.ng/documents/1385/APPROVED_RULES_ON_CREDIT_ENHANCEMENT_FACILITY_PROVIDERS2_g9yubf1.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/1323/New-Rules-and-sundry-amendments-April-2025.pdf": {
+      "ingested_at": "2026-03-06T08:20:45.343621",
+      "url": "https://home.sec.gov.ng/documents/1323/New-Rules-and-sundry-amendments-April-2025.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/1322/Executed-Rules-Dec-2024.pdf": {
+      "ingested_at": "2026-03-06T08:21:04.175367",
+      "url": "https://home.sec.gov.ng/documents/1322/Executed-Rules-Dec-2024.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/7/SEC-AMLCFTCPF-REGULATIONS-12-MAY-2022.pdf": {
+      "ingested_at": "2026-03-06T08:21:40.739071",
+      "url": "https://home.sec.gov.ng/documents/7/SEC-AMLCFTCPF-REGULATIONS-12-MAY-2022.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/9/SEC-NG-Approved-Major-Ammendments-to-Rules-Dec-20-2021_V2.pdf": {
+      "ingested_at": "2026-03-06T08:22:26.502675",
+      "url": "https://home.sec.gov.ng/documents/9/SEC-NG-Approved-Major-Ammendments-to-Rules-Dec-20-2021_V2.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/10/Social-Bond-Rule-New-October-29-2021.pdf": {
+      "ingested_at": "2026-03-06T08:22:52.628988",
+      "url": "https://home.sec.gov.ng/documents/10/Social-Bond-Rule-New-October-29-2021.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/13/Major-Amendments-to-the-SEC-NIGERIA-rules-26-April-2021.pdf": {
+      "ingested_at": "2026-03-06T08:23:35.845181",
+      "url": "https://home.sec.gov.ng/documents/13/Major-Amendments-to-the-SEC-NIGERIA-rules-26-April-2021.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/8/Rules-on-Issuance-Offering-and-Custody-of-Digital-Assets.pdf": {
+      "ingested_at": "2026-03-06T08:29:43.273342",
+      "url": "https://home.sec.gov.ng/documents/8/Rules-on-Issuance-Offering-and-Custody-of-Digital-Assets.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/11/New-Rules-and-Amendments-_Executed-30-August-2021.pdf": {
+      "ingested_at": "2026-03-06T08:30:15.714975",
+      "url": "https://home.sec.gov.ng/documents/11/New-Rules-and-Amendments-_Executed-30-August-2021.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/14/Executed-Rules-and-Amendments_22-March-2021.pdf": {
+      "ingested_at": "2026-03-06T08:30:50.777340",
+      "url": "https://home.sec.gov.ng/documents/14/Executed-Rules-and-Amendments_22-March-2021.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/15/Jan-2021-Executed-Rules.pdf": {
+      "ingested_at": "2026-03-06T08:31:06.403349",
+      "url": "https://home.sec.gov.ng/documents/15/Jan-2021-Executed-Rules.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/17/SEC-New-Rules-and-Ammendments-23-December-2019.pdf": {
+      "ingested_at": "2026-03-06T08:33:15.029496",
+      "url": "https://home.sec.gov.ng/documents/17/SEC-New-Rules-and-Ammendments-23-December-2019.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/1352/New_Rules_and_Sundry_Amendments_August_21_2019.pdf": {
+      "ingested_at": "2026-03-06T08:33:49.633018",
+      "url": "https://home.sec.gov.ng/documents/1352/New_Rules_and_Sundry_Amendments_August_21_2019.pdf",
+      "title": "Download full document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/18/Rules-For-Upload-October-2019_final.pdf": {
+      "ingested_at": "2026-03-06T08:34:11.636577",
+      "url": "https://home.sec.gov.ng/documents/18/Rules-For-Upload-October-2019_final.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    },
+    "https://home.sec.gov.ng/documents/19/12-October-2018-SEC-NG-Approved-Rules.pdf": {
+      "ingested_at": "2026-03-06T08:34:24.943548",
+      "url": "https://home.sec.gov.ng/documents/19/12-October-2018-SEC-NG-Approved-Rules.pdf",
+      "title": "Download Full Document",
+      "agency": "SEC"
+    }
+  },
   "last_check": {
-    "CBN": "2026-03-06T08:00:12.110190",
-    "SEC": "2026-03-06T08:01:34.589536"
+    "CBN": "2026-03-06T08:28:24.273522",
+    "SEC": "2026-03-06T08:34:27.948185"
   }
 }

@@ -217,12 +217,12 @@ class DocumentIngester:
             os.chdir(str(Path(__file__).resolve().parents[2]))
             from src.retrieval.embedder import NaijaCodexEmbedder
             from src.retrieval.vector_store import NaijaCodexVectorStore
-            from src.ingestion.legal_chunker import LegalChunker
+            from src.ingestion.legal_chunker import NigerianLegalChunker
             from langchain.schema import Document
 
             embedder = NaijaCodexEmbedder()
             store    = NaijaCodexVectorStore(embedder=embedder)
-            chunker  = LegalChunker()
+            chunker  = NigerianLegalChunker()
 
             # Read PDF text
             import pypdf
@@ -236,7 +236,14 @@ class DocumentIngester:
                 return False
 
             # Chunk it
-            chunks = chunker.chunk(text, metadata)
+            legal_chunks = chunker.chunk_document(
+                text            = text,
+                agency          = metadata.get("agency", ""),
+                document_name   = metadata.get("document_name", ""),
+                source_url      = metadata.get("source_url", ""),
+                publication_date= metadata.get("publication_date", ""),
+            )
+            chunks = chunker.chunks_to_documents(legal_chunks)
             store.upsert_chunks(chunks)
             log.info(f"  Ingested {len(chunks)} chunks into Pinecone")
             return True
