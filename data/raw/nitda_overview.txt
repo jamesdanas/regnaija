@@ -7,7 +7,7 @@ Section 1.0 — Overview
 The National Information Technology Development Agency (NITDA) is a Nigerian government agency established under the NITDA Act 2007. NITDA is responsible for implementing the Nigerian National Information Technology Policy, regulating IT practices in Nigeria, and driving digital economy development.
 
 Section 2.0 — Core Functions
-NITDA's core functions include: developing and promoting IT in Nigeria, regulating IT practices and standards, implementing the Nigeria Data Protection Regulation (NDPR), promoting local IT content, issuing guidelines for IT service providers, and monitoring compliance with IT regulations across government and private sector.
+NITDA core functions include developing and promoting IT in Nigeria, regulating IT practices and standards, implementing the Nigeria Data Protection Regulation (NDPR), promoting local IT content, issuing guidelines for IT service providers, and monitoring compliance with IT regulations across government and private sector.
 
 Section 3.0 — Nigeria Data Protection Regulation (NDPR)
 NITDA issued the Nigeria Data Protection Regulation (NDPR) in 2019. The NDPR governs the processing of personal data of Nigerian citizens. Organizations processing personal data must register with NITDA, appoint a Data Protection Officer (DPO), conduct Data Protection Impact Assessments (DPIA), and file annual data protection audit reports with NITDA.
@@ -16,7 +16,7 @@ Section 4.0 — IT Service Provider Regulations
 All IT companies operating in Nigeria are required to register with NITDA. NITDA regulates software procurement in government, requiring 80% local content in government IT procurement. Foreign IT companies must partner with local Nigerian firms to operate in Nigeria.
 
 Section 5.0 — Digital Economy
-NITDA implements Nigeria's National Digital Economy Policy and Strategy (NDEPS). Key focus areas include digital literacy, digital infrastructure, digital services, digital finance, digital health, and e-government. NITDA coordinates with other agencies to drive Nigeria's digital transformation agenda.
+NITDA implements Nigeria's National Digital Economy Policy and Strategy. Key focus areas include digital literacy, digital infrastructure, digital services, digital finance, digital health, and e-government. NITDA coordinates with other agencies to drive Nigeria's digital transformation agenda.
 
 Section 6.0 — Compliance and Enforcement
 NITDA has powers to investigate, sanction, and penalize organizations that violate IT regulations. Penalties for NDPR violations include fines of up to 2% of annual gross revenue or 10 million naira, whichever is greater. Organizations must report data breaches to NITDA within 72 hours of discovery.
