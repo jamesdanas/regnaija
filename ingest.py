@@ -34,7 +34,7 @@ DOCS_ROOT = Path("data/documents")
 AGENCY_FOLDERS = {
     "CBN": DOCS_ROOT / "CBN",
     "SEC": DOCS_ROOT / "SEC_Nigeria",
-    "FIRS": DOCS_ROOT / "FIRS",
+    "FIRS": DOCS_ROOT / "NRS",
     "NDPC": DOCS_ROOT / "NDPC",
     "NITDA": DOCS_ROOT / "NITDA",
 }
