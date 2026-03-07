@@ -12,3 +12,8 @@ results/
 *.db
 *.sqlite
 .env
+data/documents/**/*.pdf
+data/documents/**/*.txt
+data/processed/
+results/
+upload_to_pinecone.py
