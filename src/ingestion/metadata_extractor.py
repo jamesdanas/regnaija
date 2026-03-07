@@ -76,12 +76,12 @@ KNOWN_DOCUMENTS = {
         "url": "https://ndpc.gov.ng/media/NDPC_ImplementationFramework.pdf"
     },
     # FIRS
-    "companies_income_tax_act": {
-        "name": "Companies Income Tax Act (CITA) CAP C21 LFN 2004",
-        "short": "CITA 2004",
-        "date": "2004-01-01",
+    "nigeria_tax_act_2025": {
+        "name": "Nigeria Tax Act 2025",
+        "short": "NTA 2025",
+        "date": "2025-06-26",
         "type": "act",
-        "url": "https://firs.gov.ng/wp-content/uploads/2022/08/CITA_CAP_C21_LFN_2004-1.pdf"
+        "url": "https://nrs.gov.ng/nigeria-tax-act-2025.pdf"
     },
     # SEC Nigeria
     "investments_securities_act": {
@@ -105,7 +105,7 @@ KNOWN_DOCUMENTS = {
 AGENCY_MAP = {
     "CBN": "CBN",
     "SEC_Nigeria": "SEC",
-    "FIRS": "FIRS",
+    "NRS": "NRS",
     "NDPC": "NDPC",
     "NITDA": "NITDA",
 }
@@ -132,8 +132,8 @@ class MetadataExtractor:
             return "CBN"
         if "SECURITIES AND EXCHANGE COMMISSION" in text_upper:
             return "SEC"
-        if "FEDERAL INLAND REVENUE" in text_upper or "FIRS" in text_upper[:500]:
-            return "FIRS"
+        if "FEDERAL INLAND REVENUE" in text_upper or "FIRS" in text_upper[:500] or "NIGERIA REVENUE SERVICE" in text_upper or "NRS" in text_upper[:500]:
+            return "NRS"
         if "DATA PROTECTION COMMISSION" in text_upper or "NDPC" in text_upper:
             return "NDPC"
         if "NITDA" in text_upper or "INFORMATION TECHNOLOGY" in text_upper[:500]:
