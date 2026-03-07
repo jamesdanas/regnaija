@@ -26,5 +26,5 @@ docs = [
 upserted = store.upsert_chunks(docs)
 stats    = store.get_index_stats()
 
-print(f"✅ Uploaded {upserted} chunks to Pinecone")
-print(f"✅ Pinecone total vectors: {stats['total_vectors']}")
+print(f"Uploaded {upserted} chunks to Pinecone")
+print(f"Pinecone total vectors: {stats['total_vectors']}")

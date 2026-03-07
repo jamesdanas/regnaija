@@ -29,7 +29,7 @@ def generate_full_library_cache():
     for agency in agencies:
         agency_folder = docs_root / agency
         if not agency_folder.exists():
-            print(f"⚠️  Skipping: {agency} (Folder not found)")
+            print(f"Skipping: {agency} (Folder not found)")
             continue
             
         print(f"\nProcessing Agency: {agency}")
@@ -38,7 +38,7 @@ def generate_full_library_cache():
         files = list(agency_folder.glob("*.pdf")) + list(agency_folder.glob("*.txt"))
         
         for file_path in files:
-            print(f"  📄 {file_path.name}")
+            print(f"{file_path.name}")
             try:
                 # 1. Extract raw text
                 if file_path.suffix.lower() == '.pdf':
@@ -77,10 +77,10 @@ def generate_full_library_cache():
                         }
                     })
                 total_docs += 1
-                print(f"  ✅ Added {len(chunks)} chunks")
+                print(f"Added {len(chunks)} chunks")
 
             except Exception as e:
-                print(f"  ❌ Error processing {file_path.name}: {e}")
+                print(f"Error processing {file_path.name}: {e}")
 
     # 5. Final Save to data/processed
     output_dir = Path("data/processed")
