@@ -23,53 +23,53 @@ logging.basicConfig(
 )
 log = logging.getLogger("naijacodex.watcher")
 
-# ── Registry of pages to watch ──────────────────────────
+# Registry of pages to watch 
 WATCH_TARGETS = [
     {
-        "agency":    "CBN",
-        "name":      "CBN Policy Circulars",
-        "url":       "https://www.cbn.gov.ng/documents/policycirculars.html",
-        "base_url":  "https://www.cbn.gov.ng",
+        "agency": "CBN",
+        "name": "CBN Policy Circulars",
+        "url": "https://www.cbn.gov.ng/documents/policycirculars.html",
+        "base_url": "https://www.cbn.gov.ng",
         "selectors": ["a[href$='.pdf']", "a[href*='/out/']"],
     },
     {
-        "agency":    "CBN",
-        "name":      "CBN Banking Supervision Circulars",
-        "url":       "https://www.cbn.gov.ng/Documents/BSDCircularsNEW.html",
-        "base_url":  "https://www.cbn.gov.ng",
+        "agency": "CBN",
+        "name": "CBN Banking Supervision Circulars",
+        "url": "https://www.cbn.gov.ng/Documents/BSDCircularsNEW.html",
+        "base_url": "https://www.cbn.gov.ng",
         "selectors": ["a[href$='.pdf']", "a[href*='/out/']"],
     },
     {
-        "agency":    "CBN",
-        "name":      "CBN All Documents",
-        "url":       "https://www.cbn.gov.ng/Documents/",
-        "base_url":  "https://www.cbn.gov.ng",
+        "agency": "CBN",
+        "name": "CBN All Documents",
+        "url": "https://www.cbn.gov.ng/Documents/",
+        "base_url": "https://www.cbn.gov.ng",
         "selectors": ["a[href$='.pdf']", "a[href*='/out/']"],
     },
     {
-        "agency":    "SEC",
-        "name":      "SEC Nigeria Rules and Regulations",
-        "url":       "https://home.sec.gov.ng/our-mandate/regulation/rules-and-regulations/",
-        "base_url":  "https://home.sec.gov.ng",
+        "agency": "SEC",
+        "name": "SEC Nigeria Rules and Regulations",
+        "url": "https://home.sec.gov.ng/our-mandate/regulation/rules-and-regulations/",
+        "base_url": "https://home.sec.gov.ng",
         "selectors": ["a[href$='.pdf']", "a[href*='documents']"],
     },
     {
-        "agency":    "SEC",
-        "name":      "SEC Nigeria Circulars",
-        "url":       "https://sec.gov.ng/for-investors/keep-track-of-circulars/",
-        "base_url":  "https://sec.gov.ng",
+        "agency": "SEC",
+        "name": "SEC Nigeria Circulars",
+        "url": "https://sec.gov.ng/for-investors/keep-track-of-circulars/",
+        "base_url": "https://sec.gov.ng",
         "selectors": ["a[href$='.pdf']", "a[href*='wp-content']"],
     },
     {
-        "agency":    "NDPC",
-        "name":      "NDPC Publications",
-        "url":       "https://ndpc.gov.ng/publications",
-        "base_url":  "https://ndpc.gov.ng",
+        "agency": "NDPC",
+        "name": "NDPC Publications",
+        "url": "https://ndpc.gov.ng/publications",
+        "base_url": "https://ndpc.gov.ng",
         "selectors": ["a[href$='.pdf']", "a[href*='wp-content']"],
     },
 ]
 
-_ROOT         = Path(__file__).resolve().parents[2]
+_ROOT = Path(__file__).resolve().parents[2]
 REGISTRY_PATH = _ROOT / "data/watcher_registry.json"
 DOWNLOAD_DIR  = _ROOT / "data/watcher_downloads"
 CHECK_INTERVAL_HOURS = 24  # Check every 24 hours
@@ -115,7 +115,7 @@ class AgencyWatcher:
     """Watches a single agency page for new documents."""
 
     def __init__(self, target: dict, registry: DocumentRegistry):
-        self.target   = target
+        self.target = target
         self.registry = registry
         self.session  = requests.Session()
         self.session.headers.update({
@@ -148,8 +148,8 @@ class AgencyWatcher:
 
                 title = tag.get_text(strip=True) or Path(href).stem
                 links.append({
-                    "url":    full_url,
-                    "title":  title,
+                    "url": full_url,
+                    "title": title,
                     "agency": self.target["agency"],
                 })
         return links
@@ -161,7 +161,7 @@ class AgencyWatcher:
         if not soup:
             return []
 
-        links     = self.extract_pdf_links(soup)
+        links = self.extract_pdf_links(soup)
         new_docs  = [l for l in links if not self.registry.is_known(l["url"])]
         log.info(f"  Found {len(links)} links, {len(new_docs)} new")
         self.registry.update_last_check(self.target["agency"])
@@ -179,7 +179,7 @@ class DocumentIngester:
             resp = requests.get(url, timeout=30, stream=True)
             resp.raise_for_status()
             filename = hashlib.md5(url.encode()).hexdigest() + ".pdf"
-            path     = DOWNLOAD_DIR / filename
+            path = DOWNLOAD_DIR / filename
             with open(path, "wb") as f:
                 for chunk in resp.iter_content(chunk_size=8192):
                     f.write(chunk)
@@ -202,16 +202,16 @@ class DocumentIngester:
 
             if not hasattr(self, "_embedder"):
                 self._embedder = NaijaCodexEmbedder()
-                self._store    = NaijaCodexVectorStore(embedder=self._embedder)
-                self._chunker  = NigerianLegalChunker()
+                self._store = NaijaCodexVectorStore(embedder=self._embedder)
+                self._chunker = NigerianLegalChunker()
             embedder = self._embedder
-            store    = self._store
+            store = self._store
             chunker  = self._chunker
 
             # Read PDF text
             import pypdf
             reader = pypdf.PdfReader(str(pdf_path))
-            text   = "\n".join(
+            text = "\n".join(
                 page.extract_text() or "" for page in reader.pages
             )
 
@@ -221,10 +221,10 @@ class DocumentIngester:
 
             # Chunk it
             legal_chunks = chunker.chunk_document(
-                text            = text,
-                agency          = metadata.get("agency", ""),
-                document_name   = metadata.get("document_name", ""),
-                source_url      = metadata.get("source_url", ""),
+                text = text,
+                agency = metadata.get("agency", ""),
+                document_name = metadata.get("document_name", ""),
+                source_url = metadata.get("source_url", ""),
                 publication_date= metadata.get("publication_date", ""),
             )
             chunks = chunker.chunks_to_documents(legal_chunks)
@@ -241,9 +241,9 @@ class NaijaCodexWatcher:
     """Main watcher service — orchestrates all agency watchers."""
 
     def __init__(self):
-        self.registry  = DocumentRegistry(REGISTRY_PATH)
-        self.ingester  = DocumentIngester()
-        self.watchers  = [
+        self.registry = DocumentRegistry(REGISTRY_PATH)
+        self.ingester = DocumentIngester()
+        self.watchers = [
             AgencyWatcher(target, self.registry)
             for target in WATCH_TARGETS
         ]
@@ -264,9 +264,9 @@ class NaijaCodexWatcher:
 
                 if pdf_path:
                     success = self.ingester.ingest(pdf_path, {
-                        "agency":           doc["agency"],
-                        "document_name":    doc["title"],
-                        "source_url":       doc["url"],
+                        "agency": doc["agency"],
+                        "document_name": doc["title"],
+                        "source_url": doc["url"],
                         "publication_date": datetime.now().strftime("%Y-%m-%d"),
                     })
                     if success:
