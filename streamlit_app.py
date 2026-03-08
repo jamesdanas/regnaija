@@ -27,7 +27,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Persistence ─────────────────────────────────────────────────────────────
+# ─ Persistence 
 SESSIONS_FILE = Path("naijacodex_sessions.json")
 
 def load_sessions():
@@ -47,7 +47,7 @@ def save_sessions(sessions_list):
     except Exception:
         pass  # Silently fail on ephemeral filesystems (Streamlit Cloud)
 
-# ── CSS ──────────────────────────────────────────────────────────────────────
+#  CSS 
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -180,20 +180,20 @@ st.markdown("""
 
 # ── Session state ────────────────────────────────────────────────────────────
 for k, v in {
-    "messages":        [],
-    "sessions":        load_sessions(),
-    "current_index":   -1,
-    "total_queries":   0,
-    "total_chunks":    0,
-    "pipeline_ready":  False,
-    "last_question":   "",
-    "last_processed":  "",
-    "pending_followups": None,   # FIX 1: lazy follow-ups stored here
+    "messages": [],
+    "sessions": load_sessions(),
+    "current_index": -1,
+    "total_queries": 0,
+    "total_chunks": 0,
+    "pipeline_ready": False,
+    "last_question": "",
+    "last_processed": "",
+    "pending_followups": None,   # lazy follow-ups stored here
 }.items():
     if k not in st.session_state:
         st.session_state[k] = v
 
-# ── Pipeline ─────────────────────────────────────────────────────────────────
+# Pipeline 
 @st.cache_resource
 def load_pipeline():
     from src.graph.rag_graph import NaijaCodexPipeline
@@ -206,7 +206,7 @@ if not st.session_state.pipeline_ready:
 else:
     pipeline = load_pipeline()
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+#  Helpers 
 def is_casual(text: str) -> bool:
     return not any(s in text.lower() for s in [
         "cbn","sec","ndpc","nrs","nitda","cyber","penalty","compliance","regulation",
@@ -338,7 +338,7 @@ with st.sidebar:
 
     st.divider()
     st.markdown("**Upload Regulatory Document**")
-    st.caption("⚠️ Uploaded files are not persisted on Streamlit Cloud.")
+    st.caption("Uploaded files are not persisted on Streamlit Cloud.")
     uploaded = st.file_uploader("PDF or TXT", type=["pdf", "txt"], key="sidebar_upload")
     if uploaded and st.button("Ingest Document", type="primary", use_container_width=True):
         with st.spinner("Ingesting..."):
@@ -351,7 +351,7 @@ with st.sidebar:
                 # FIX 3: guard against missing method
                 if hasattr(pipeline, "ingest_document"):
                     pipeline.ingest_document(tmp_path)
-                    st.success(f"✅ {uploaded.name} ingested!")
+                    st.success(f"{uploaded.name} ingested!")
                 else:
                     st.warning("Document ingestion not yet supported via UI.")
             except Exception as e:
@@ -359,16 +359,16 @@ with st.sidebar:
 
     st.divider()
     st.markdown("**Regulatory Bodies**")
-    for icon, short, url in [
-        ("🏦", "CBN",   "https://www.cbn.gov.ng"),
-        ("📈", "SEC",   "https://home.sec.gov.ng"),
-        ("🔒", "NDPC",  "https://ndpc.gov.ng"),
-        ("💰", "NRS",   "https://nrs.gov.ng"),
-        ("💻", "NITDA", "https://nitda.gov.ng"),
+    for short, url in [
+        ("CBN", "https://www.cbn.gov.ng"),
+        ("SEC", "https://home.sec.gov.ng"),
+        ("NDPC", "https://ndpc.gov.ng"),
+        ("NRS", "https://nrs.gov.ng"),
+        ("NITDA", "https://nitda.gov.ng"),
     ]:
         st.markdown(
             f'<a href="{url}" target="_blank" style="color:#ccc;text-decoration:none;">'
-            f'{icon} <strong>{short}</strong> ↗</a>',
+            f'<strong>{short}</strong> ↗</a>',
             unsafe_allow_html=True,
         )
 
@@ -382,8 +382,8 @@ with st.sidebar:
         col1, col2 = st.columns([5, 1])
         with col1:
             if st.button(f"↩ {label}...", key=f"load_{i}", use_container_width=True):
-                st.session_state.current_index     = i
-                st.session_state.messages          = sess["messages"][:]
+                st.session_state.current_index = i
+                st.session_state.messages = sess["messages"][:]
                 st.session_state.pending_followups = None
                 st.rerun()
         with col2:
@@ -392,7 +392,7 @@ with st.sidebar:
                 save_sessions(st.session_state.sessions)
                 if st.session_state.current_index >= len(st.session_state.sessions):
                     st.session_state.current_index = -1
-                    st.session_state.messages      = []
+                    st.session_state.messages = []
                 st.rerun()
 
     st.divider()
@@ -404,7 +404,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 
-# ── MAIN ──────────────────────────────────────────────────────────────────────
+# MAIN 
 st.markdown("""
 <h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>🏛️ NaijaCodex</h1>
 <p style='text-align:center;color:#555;font-size:12px;'>CBN · SEC · NDPC · NRS · NITDA</p>
@@ -413,19 +413,19 @@ st.markdown("""
 if not st.session_state.messages:
     st.markdown("""
     <div style='text-align:center;padding:80px 20px;'>
-      <div style='font-size:4rem;margin-bottom:20px;'>⚖️</div>
+      <div style='font-size:4rem;margin-bottom:20px;'></div>
       <h2 style='color:#444;'>Ask anything about Nigerian regulations</h2>
       <p style='color:#333;'>Powered by RAG · Citation-backed · Use sidebar for example questions</p>
     </div>
     """, unsafe_allow_html=True)
 
-# ── Chat history ──────────────────────────────────────────────────────────────
+# Chat history 
 for idx, msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"], avatar="🏛️" if msg["role"] == "assistant" else None):
         st.markdown(msg["content"])
 
         if msg["role"] == "assistant" and msg.get("meta"):
-            meta    = msg["meta"]
+            meta = msg["meta"]
             raw_cit = meta.get("citations", "")
 
             if raw_cit and raw_cit != "No sources found.":
@@ -433,12 +433,12 @@ for idx, msg in enumerate(st.session_state.messages):
                 with st.expander("📎 Official Sources", expanded=False):
                     st.markdown(sources_md)
 
-            conf     = meta.get("confidence", "MED")
+            conf = meta.get("confidence", "MED")
             agencies = ", ".join(meta.get("agencies_searched", [])) or "N/A"
-            chunks   = meta.get("chunks", 0)
-            qid      = meta.get("query_id", "")
-            latency  = meta.get("latency_ms", 0)
-            conflict = " · ⚠️ Conflict" if meta.get("conflict") else ""
+            chunks = meta.get("chunks", 0)
+            qid = meta.get("query_id", "")
+            latency = meta.get("latency_ms", 0)
+            conflict = " · Conflict" if meta.get("conflict") else ""
             st.markdown(
                 f"<div class='metadata-line'>{qid} · {agencies} · "
                 f"{chunks} chunks · {conf[:4]} · {latency}ms{conflict}</div>",
@@ -447,7 +447,7 @@ for idx, msg in enumerate(st.session_state.messages):
 
         # Copy button
         if msg["role"] == "assistant":
-            if st.button("📋 Copy", key=f"copy_{idx}"):
+            if st.button("Copy", key=f"copy_{idx}"):
                 full = msg["content"]
                 if msg.get("meta"):
                     raw_cit = msg["meta"].get("citations", "")
@@ -457,9 +457,9 @@ for idx, msg in enumerate(st.session_state.messages):
                     f"<script>navigator.clipboard.writeText({json.dumps(full)});</script>",
                     unsafe_allow_html=True,
                 )
-                st.toast("Copied!", icon="📋")
+                st.toast("Copied!", icon="")
 
-# ── Follow-up suggestions ─────────────────────────────────────────────────────
+# Follow-up suggestions 
 # Cache by message count — no LLM call on plain reruns, no stale key clashes
 _msgs = st.session_state.messages
 if _msgs and _msgs[-1]["role"] == "assistant" and _msgs[-1].get("meta"):
@@ -477,18 +477,18 @@ if _msgs and _msgs[-1]["role"] == "assistant" and _msgs[-1].get("meta"):
                     st.session_state.last_question = _sug
                     st.rerun()
 
-# ── Chat input ────────────────────────────────────────────────────────────────
+# Chat input 
 question = st.chat_input("Ask about Nigerian regulations...")
 
 if st.session_state.get("last_question"):
     question = st.session_state.last_question
     st.session_state.last_question = ""
 
-# FIX 2: dedup by content+turn-count, not just content string
+# dedup by content+turn-count, not just content string
 turn_key = f"{question}_{len(st.session_state.messages)}" if question else ""
 
 if question and turn_key != st.session_state.get("last_processed", ""):
-    st.session_state.last_processed    = turn_key
+    st.session_state.last_processed = turn_key
     st.session_state.pending_followups = None
     st.session_state.messages.append({"role": "user", "content": question, "meta": None})
 
@@ -497,25 +497,25 @@ if question and turn_key != st.session_state.get("last_processed", ""):
         try:
             if is_casual(question):
                 answer = casual_response(question)
-                meta   = None
+                meta = None
             else:
-                result   = pipeline.query(question)
-                answer   = clean_answer(result.get("answer", ""))
-                raw_cit  = result.get("citations", "")
-                conf     = result.get("confidence", "MED")
+                result = pipeline.query(question)
+                answer = clean_answer(result.get("answer", ""))
+                raw_cit = result.get("citations", "")
+                conf = result.get("confidence", "MED")
                 agencies = result.get("agencies_searched", [])
-                chunks   = len(result.get("retrieved_docs", []))
-                qid      = result.get("query_id", "")
-                latency  = result.get("latency_ms", 0)
+                chunks = len(result.get("retrieved_docs", []))
+                qid = result.get("query_id", "")
+                latency = result.get("latency_ms", 0)
                 conflict = result.get("conflicts_found", False)
                 meta = {
-                    "citations":         raw_cit,
-                    "confidence":        conf,
+                    "citations": raw_cit,
+                    "confidence": conf,
                     "agencies_searched": agencies,
-                    "chunks":            chunks,
-                    "query_id":          qid,
-                    "latency_ms":        latency,
-                    "conflict":          conflict,
+                    "chunks": chunks,
+                    "query_id": qid,
+                    "latency_ms": latency,
+                    "conflict": conflict,
                 }
                 st.session_state.total_queries += 1
                 st.session_state.total_chunks  += chunks
