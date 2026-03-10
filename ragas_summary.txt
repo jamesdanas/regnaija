@@ -1,0 +1,23 @@
+═════════════════════════════════════════════════════════════════════════════════════
+  NaijaCodex — RAGAS Evaluation Results
+  20260310_091826  |  9 questions  |  0 flagged
+  Metrics: Faithfulness · Context Precision · Context Recall
+  (ResponseRelevancy excluded — ragas 0.2.6 + non-OpenAI embeddings returns 0.000)
+═════════════════════════════════════════════════════════════════════════════════════
+#    Question                                              Faith   Prec   Rcll    Avg
+─────────────────────────────────────────────────────────────────────────────────────
+1   What cybersecurity frameworks must fintechs comply w  0.750  0.943  0.500  0.731
+2   What are the data subject rights under the Nigeria D  0.917  1.000  0.625  0.847
+3   What are the capital requirements for stockbrokers u    nan    nan    nan    nan
+4   What are the obligations of data controllers under N    nan    nan    nan    nan
+5   What open banking participation requirements apply u    nan    nan    nan    nan
+6   What penalties apply for violating NITDA IT regulati    nan    nan    nan    nan
+7   What are the licensing requirements for payment serv    nan    nan    nan    nan
+8   How does the Nigeria Data Protection Act 2023 define    nan    nan    nan    nan
+9   What incident response obligations do banks have und    nan    nan    nan    nan
+─────────────────────────────────────────────────────────────────────────────────────
+AVG ....................................................    nan    nan    nan    nan
+═════════════════════════════════════════════════════════════════════════════════════
+📄 ragas_results.json
+⚠️  ragas_flagged.json
+📝 ragas_summary.txt

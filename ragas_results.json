@@ -1,0 +1,160 @@
+{
+  "run_at": "20260310_091826",
+  "results": [
+    {
+      "id": 1,
+      "question": "What cybersecurity frameworks must fintechs comply with under CBN guidelines?",
+      "answer": "**Direct Answer**\nFintechs must comply with the CBN's Risk-Based Cybersecurity Framework and Guidelines for Deposit Money Banks and Payment Service Providers, as well as the Cybersecurity Framework and Guidelines for Other Financial Institutions.\n\n**Regulatory Basis**\nAccording to Section 3.0 of the...",
+      "ground_truth": "Fintechs must comply with the CBN Risk-based Cybersecurity Framework and Guidelines for Deposit Money Banks and Payment Service Providers, and the CBN Risk-based Cybersecurity Framework for Other Financial Institutions. They must develop security policies, adopt risk management practices, and establish incident management procedures.",
+      "latency_ms": 9860,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "CBN",
+        "SEC"
+      ],
+      "scores": {
+        "faithfulness": 0.75,
+        "context_precision": 0.9429,
+        "context_recall": 0.5
+      },
+      "avg_score": 0.731
+    },
+    {
+      "id": 2,
+      "question": "What are the data subject rights under the Nigeria Data Protection Act 2023?",
+      "answer": "**Direct Answer**\nThe data subject rights under the Nigeria Data Protection Act 2023 include the right to be informed, access, rectification, erasure, and objection to the processing of their personal data. These rights are outlined in Section 4.1 of the Act.\n\n**Regulatory Basis**\nAccording to Secti...",
+      "ground_truth": "Under the NDPA 2023, data subjects have the right to be informed, right of access, right to rectification, right to erasure, right to restrict processing, right to data portability, right to object, and rights related to automated decision-making and profiling.",
+      "latency_ms": 1860,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "NDPC"
+      ],
+      "scores": {
+        "faithfulness": 0.9167,
+        "context_precision": 1.0,
+        "context_recall": 0.625
+      },
+      "avg_score": 0.8472
+    },
+    {
+      "id": 3,
+      "question": "What are the capital requirements for stockbrokers under SEC rules?",
+      "answer": "**Direct Answer**\nThe capital requirements for stockbrokers, also known as securities dealers, under SEC rules are not explicitly stated in the provided sources for stockbrokers. However, for individual sub-brokers, the minimum net worth requirement is N500,000.\n\n**Regulatory Basis**\nAccording to Se...",
+      "ground_truth": "SEC requires stockbrokers and broker-dealers to maintain minimum paid-up capital as specified in the SEC Rules and Regulations. Capital adequacy requirements are set for different categories of market operators in the Nigerian capital market.",
+      "latency_ms": 2342,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "SEC"
+      ],
+      "scores": {
+        "faithfulness": NaN,
+        "context_precision": NaN,
+        "context_recall": NaN
+      },
+      "avg_score": NaN
+    },
+    {
+      "id": 4,
+      "question": "What are the obligations of data controllers under NDPC 2023?",
+      "answer": "**Direct Answer**\nThe obligations of data controllers under the NDPC 2023 include complying with the Act to avoid fines, not transferring personal data to foreign countries without adequate protection, and respecting data subjects' rights. Data controllers must also ensure they do not retain persona...",
+      "ground_truth": "Data controllers must obtain lawful consent, implement technical and organisational security measures, appoint a Data Protection Officer where required, conduct Data Protection Impact Assessments for high-risk processing, register with the NDPC, and report data breaches within 72 hours.",
+      "latency_ms": 2200,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "NDPC"
+      ],
+      "scores": {
+        "faithfulness": NaN,
+        "context_precision": NaN,
+        "context_recall": NaN
+      },
+      "avg_score": NaN
+    },
+    {
+      "id": 5,
+      "question": "What open banking participation requirements apply under CBN policy?",
+      "answer": "**Direct Answer**\nTo participate in open banking under CBN policy, participants must ensure compliance with the CBN Risk-based Cybersecurity Framework and Guidelines, develop and implement security policies for authorized and secure API connections, adopt risk management practices, and comply with v...",
+      "ground_truth": "Participants must comply with the CBN Risk-based Cybersecurity Framework, implement information security and privacy procedures, ensure API security, obtain customer consent before sharing data, and comply with the Nigerian Data Protection Regulation as stated in Section 9.2 of the CBN Open Banking Policy.",
+      "latency_ms": 2499,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "CBN"
+      ],
+      "scores": {
+        "faithfulness": NaN,
+        "context_precision": NaN,
+        "context_recall": NaN
+      },
+      "avg_score": NaN
+    },
+    {
+      "id": 6,
+      "question": "What penalties apply for violating NITDA IT regulations?",
+      "answer": "**Direct Answer**\nViolating NITDA IT regulations, specifically the Nigeria Data Protection Regulation (NDPR), can result in penalties including fines of up to 2% of annual gross revenue or 10 million naira, whichever is greater.\n\n**Regulatory Basis**\nAccording to Section 6.0 of the NITDA Overview an...",
+      "ground_truth": "NITDA can investigate, sanction, and penalise organisations that violate IT regulations under Section 6.0 of NITDA compliance and enforcement powers. Under the NDPR, organisations face fines up to 2% of annual gross revenue or 10 million naira for data protection non-compliance.",
+      "latency_ms": 2047,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "NITDA"
+      ],
+      "scores": {
+        "faithfulness": NaN,
+        "context_precision": NaN,
+        "context_recall": NaN
+      },
+      "avg_score": NaN
+    },
+    {
+      "id": 7,
+      "question": "What are the licensing requirements for payment service providers under CBN?",
+      "answer": "**Direct Answer**\nThe licensing requirements for payment service providers under CBN are not explicitly stated in the provided regulatory sources. However, it is mentioned that participants in the open banking ecosystem must be registered institutions, and the CBN shall provide and maintain an Open ...",
+      "ground_truth": "Payment service providers must obtain a CBN licence by meeting minimum capital thresholds, having fit and proper directors, demonstrating technical capability, and complying with AML/CFT regulations and CBN cybersecurity frameworks.",
+      "latency_ms": 2363,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "CBN"
+      ],
+      "scores": {
+        "faithfulness": NaN,
+        "context_precision": NaN,
+        "context_recall": NaN
+      },
+      "avg_score": NaN
+    },
+    {
+      "id": 8,
+      "question": "How does the Nigeria Data Protection Act 2023 define personal data?",
+      "answer": "**Direct Answer**\nThe Nigeria Data Protection Act 2023 does not explicitly define personal data in the provided regulatory sources. However, it mentions the processing, retention, and protection of personal data throughout various sections.\n\n**Regulatory Basis**\nThe Act regulates the processing of p...",
+      "ground_truth": "The NDPA 2023 defines personal data as any information relating to an identified or identifiable natural person, including names, identification numbers, location data, online identifiers, and factors specific to physical, physiological, genetic, mental, economic, cultural, or social identity.",
+      "latency_ms": 4800,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "NDPC"
+      ],
+      "scores": {
+        "faithfulness": NaN,
+        "context_precision": NaN,
+        "context_recall": NaN
+      },
+      "avg_score": NaN
+    },
+    {
+      "id": 9,
+      "question": "What incident response obligations do banks have under CBN cybersecurity guidelines?",
+      "answer": "**Direct Answer**\nBanks in Nigeria have incident response obligations under the CBN cybersecurity guidelines, which include implementing security measures, establishing incident management procedures, and reporting major security incidents to the CBN without undue delay. They must also integrate pla...",
+      "ground_truth": "Banks must establish an incident management framework covering detection, containment, eradication, recovery, and post-incident review. They must report material cyber incidents to the CBN within prescribed timeframes and maintain incident logs for regulatory examination.",
+      "latency_ms": 5461,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "agencies": [
+        "CBN",
+        "SEC"
+      ],
+      "scores": {
+        "faithfulness": NaN,
+        "context_precision": NaN,
+        "context_recall": NaN
+      },
+      "avg_score": NaN
+    }
+  ]
+}
