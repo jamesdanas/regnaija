@@ -275,3 +275,15 @@ MIT License
 <div align="center">
   <sub>Built with 🇳🇬 pride · Powered by Groq · Pinecone · LangGraph · Gradio</sub>
 </div>
+
+## Documents Ingested (not tracked in git)
+
+| File | Agency | Source |
+|------|--------|--------|
+| `data/documents/CBN/cbn_consumer_protection.pdf` | CBN | CBN website |
+| `data/documents/CBN/cbn_cybersecurity_framework.pdf` | CBN | CBN website |
+| `data/documents/CBN/cbn_open_banking_policy.pdf` | CBN | CBN website |
+| `data/documents/CBN/NEW-CBN-LICENCING-REQUIREMENTS-FOR-PAYMENT-SERVICES.pdf` | CBN | Detail Commercial Solicitors / CBN circular May 2021 |
+| `data/documents/CBN/REGULATORY_FRAMEWORK_FOR_MOBILE_PAYMENTS_SERVICES_IN_NIGERIA.pdf` | CBN | CBN website |
+
+All documents are ingested into Pinecone index `naijacodex`. Re-ingest using `src/watcher/watcher.py DocumentIngester`.
