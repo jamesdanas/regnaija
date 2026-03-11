@@ -1,11 +1,11 @@
 {
-  "run_at": "20260311_050711",
+  "run_at": "20260311_150104",
   "results": [
     {
       "id": 1,
       "question": "What cybersecurity frameworks must fintechs comply with under CBN guidelines?",
-      "answer": "**Direct Answer**\nFintechs must comply with the CBN Risk-Based Cybersecurity Framework and Guidelines for Deposit Money Banks and Payment Service Providers, as well as the Cybersecurity Framework and Guidelines for Other Financial Institutions.\n\n**Regulatory Basis**\n\"Participants shall: ... Ensure c...",
-      "latency_ms": 11980,
+      "answer": "**Direct Answer**\nFintechs must comply with the CBN Risk-Based Cybersecurity Framework and Guidelines for Deposit Money Banks and Payment Service Providers, as well as the Cyber-Security Framework and Guidelines for Other Financial Institutions.\n\n**Regulatory Basis**\n\"Participants shall: Ensure comp...",
+      "latency_ms": 13404,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
@@ -17,7 +17,7 @@
       "id": 2,
       "question": "What are the data subject rights under the Nigeria Data Protection Act 2023?",
       "answer": "**Direct Answer**\nEvery data subject in Nigeria has the right to be informed of the processing of their personal data, access their personal data, request rectification of inaccurate personal data, request erasure of personal data where processing is unlawful, and object to processing of their perso...",
-      "latency_ms": 1787,
+      "latency_ms": 1535,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
@@ -29,7 +29,7 @@
       "id": 3,
       "question": "What are the capital requirements for stockbrokers under SEC rules?",
       "answer": "**Direct Answer**\nStockbrokers under SEC rules are not explicitly mentioned in the provided sources. However, the capital requirements for securities dealers and capital market holding companies are outlined. \n\n**Regulatory Basis**\nThe capital requirements for securities dealers are not explicitly s...",
-      "latency_ms": 2196,
+      "latency_ms": 2472,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
@@ -41,19 +41,19 @@
       "id": 4,
       "question": "What are the obligations of data controllers under NDPC 2023?",
       "answer": "**Direct Answer**\nData controllers under the NDPC 2023 have several obligations, including informing data subjects of processing, providing access to personal data, requesting rectification of inaccurate data, requesting erasure of unlawful data, and objecting to processing. They must also not trans...",
-      "latency_ms": 7930,
+      "latency_ms": 8423,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
-        "context_recall": 0.1667
+        "context_recall": 1.0
       },
-      "avg_score": 0.5834
+      "avg_score": 1.0
     },
     {
       "id": 5,
       "question": "What open banking participation requirements apply under CBN policy?",
       "answer": "**Direct Answer**\nTo participate in open banking under CBN policy, institutions must ensure compliance with the provisions of the extant CBN Risk-based Cybersecurity Framework and Guidelines for Deposit Money Banks and Payment Service Providers, and CBN Risk-based Cybersecurity Framework and Guideli...",
-      "latency_ms": 18810,
+      "latency_ms": 16396,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
@@ -65,7 +65,7 @@
       "id": 6,
       "question": "What penalties apply for violating NITDA IT regulations?",
       "answer": "**Direct Answer**\nViolating NITDA IT regulations can result in fines of up to 2% of annual gross revenue or 10 million naira, whichever is greater. Organizations must also report data breaches to NITDA within 72 hours of discovery.\n\n**Regulatory Basis**\nNITDA has powers to investigate, sanction, and...",
-      "latency_ms": 8272,
+      "latency_ms": 8356,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
@@ -76,20 +76,20 @@
     {
       "id": 7,
       "question": "What are the licensing requirements for payment service providers under CBN?",
-      "answer": "**Direct Answer**\nTo obtain a license as a payment service provider under the CBN, one must meet the requirements outlined in the CBN Cybersecurity Framework for Nigerian Banking Sector and the CBN Open Banking Policy for Nigeria. The specific requirements include ensuring compliance with the CBN Ri...",
-      "latency_ms": 20777,
+      "answer": "**Direct Answer**\nTo obtain a payment service provider license under the CBN, an applicant company must make a non-refundable application fee of N100,000 and a licensing fee of N1,000,000. The company must also meet the minimum capital requirement and make a refundable deposit in its name into the C...",
+      "latency_ms": 20172,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
-        "context_recall": 0.2
+        "context_recall": 0.5
       },
-      "avg_score": 0.6
+      "avg_score": 0.75
     },
     {
       "id": 8,
       "question": "How does the Nigeria Data Protection Act 2023 define personal data?",
       "answer": "**Direct Answer**\nPersonal data is defined in the context of the Nigeria Data Protection Act 2023 as information that is processed by a data controller, and it includes data that is used to identify a natural person.\n\n**Regulatory Basis**\nPersonal data shall be processed only if at least one of the ...",
-      "latency_ms": 12639,
+      "latency_ms": 12275,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
@@ -101,7 +101,7 @@
       "id": 9,
       "question": "What SEC disclosure requirements apply to public companies in Nigeria?",
       "answer": "**Direct Answer**\nPublic companies in Nigeria are required to disclose certain information on their websites, including corporate governance information, and must also make quarterly reports to the SEC on claims settled under the Investor Protection Fund.\n\n**Regulatory Basis**\n\"Public companies shal...",
-      "latency_ms": 21858,
+      "latency_ms": 20873,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
@@ -113,13 +113,13 @@
       "id": 10,
       "question": "What incident response obligations do banks have under CBN cybersecurity guidelines?",
       "answer": "**Direct Answer**\nBanks have incident response obligations under CBN cybersecurity guidelines, which include reporting major security incidents without undue delay to the competent authorities, establishing incident management procedures, and implementing corrective actions based on root causes.\n\n**...",
-      "latency_ms": 22082,
+      "latency_ms": 21675,
       "confidence": "HIGH — Direct match found in regulatory documents",
       "scores": {
         "context_precision": 1.0,
-        "context_recall": 1.0
+        "context_recall": 0.6667
       },
-      "avg_score": 1.0
+      "avg_score": 0.8334
     }
   ]
 }
