@@ -59,7 +59,7 @@ for i, item in enumerate(GOLDEN_SET, 1):
             raw = result.get("citations", "")
             contexts = [raw] if raw else ["No context retrieved."]
         conf = str(result.get("confidence", "?"))
-        print(f"         ✓  {len(contexts)} chunks · {latency}ms · conf={conf[:4]}")
+        print(f"{len(contexts)} chunks · {latency}ms · conf={conf[:4]}")
         records.append({"question": q, "answer": answer, "contexts": contexts,
                         "ground_truth": gt, "latency_ms": latency,
                         "confidence": conf, "agencies": result.get("agencies_searched", []),

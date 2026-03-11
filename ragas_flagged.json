@@ -1,4 +1,35 @@
 {
-  "run_at": "20260310_091826",
-  "flagged": []
+  "run_at": "20260311_050711",
+  "flagged": [
+    {
+      "id": 4,
+      "question": "What are the obligations of data controllers under NDPC 2023?",
+      "answer": "**Direct Answer**\nData controllers under the NDPC 2023 have several obligations, including informing data subjects of processing, providing access to personal data, requesting rectification of inaccurate data, requesting erasure of unlawful data, and objecting to processing. They must also not trans...",
+      "latency_ms": 7930,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "scores": {
+        "context_precision": 1.0,
+        "context_recall": 0.1667
+      },
+      "avg_score": 0.5834,
+      "low_metrics": {
+        "context_recall": 0.1667
+      }
+    },
+    {
+      "id": 7,
+      "question": "What are the licensing requirements for payment service providers under CBN?",
+      "answer": "**Direct Answer**\nTo obtain a license as a payment service provider under the CBN, one must meet the requirements outlined in the CBN Cybersecurity Framework for Nigerian Banking Sector and the CBN Open Banking Policy for Nigeria. The specific requirements include ensuring compliance with the CBN Ri...",
+      "latency_ms": 20777,
+      "confidence": "HIGH — Direct match found in regulatory documents",
+      "scores": {
+        "context_precision": 1.0,
+        "context_recall": 0.2
+      },
+      "avg_score": 0.6,
+      "low_metrics": {
+        "context_recall": 0.2
+      }
+    }
+  ]
 }
