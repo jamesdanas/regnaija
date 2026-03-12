@@ -126,7 +126,7 @@ Layer               Technology
 UI                  Streamlit (chat interface)
 LLM                 Groq API — llama-3.3-70b-versatile
 Embeddings          BAAI/bge-small-en-v1.5 (384-dim)
-Vector Store        Pinecone (1,095+ chunks, cosine similarity)
+Vector Store        Pinecone (1,297 chunks, cosine similarity)
 Orchestration       LangGraph 0.2 (5-node agentic pipeline)
 Chunking            Custom NigerianLegalChunker
 PDF Processing      pypdf + custom OCR processor
@@ -245,7 +245,7 @@ python eval_score.py                                       # Score with RAGAS
 
 | Metric | Value |
 |--------|-------|
-| Vector store chunks | 1,095+ |
+| Vector store chunks | 1,297 |
 | Agencies covered | 5 (CBN, SEC, NDPC, NRS, NITDA) |
 | Chunks per query | 8 (top-k retrieval) |
 | Avg retrieval score | 0.75–0.84 (cosine) |
