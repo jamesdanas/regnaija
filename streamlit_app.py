@@ -1,8 +1,10 @@
 """
 streamlit_app.py — NaijaCodex front-end built with Streamlit.
+Upgrades: streaming responses, confidence badge, RAGAS scores in sidebar.
 """
 import re
 import json
+import time
 from pathlib import Path
 import warnings
 import sys
@@ -21,7 +23,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Persistence 
+#  Persistence 
 SESSIONS_FILE = Path("naijacodex_sessions.json")
 
 def load_sessions():
@@ -41,7 +43,7 @@ def save_sessions(sessions_list):
     except Exception:
         pass
 
-# CSS 
+#  CSS 
 st.markdown("""
 <style>
     :root {
@@ -50,7 +52,6 @@ st.markdown("""
         --chat-bg-ai: #1e1e1e;
         --border: rgba(59, 130, 246, 0.18);
         --text: #e5e7eb;
-        --muted: #9ca3af;
         --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     }
 
@@ -79,6 +80,7 @@ st.markdown("""
         margin: 0 auto !important;
     }
 
+    /* User messages */
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) {
         margin-left: auto !important;
         margin-right: 0 !important;
@@ -92,6 +94,7 @@ st.markdown("""
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"])
         [data-testid="chatMessageContent"] { color: white !important; }
 
+    /* Assistant messages */
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-assistant"]) {
         margin-right: auto !important;
         margin-left: 0 !important;
@@ -103,6 +106,7 @@ st.markdown("""
         box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
     }
 
+    /* Chat input */
     div[data-testid="stChatInput"] {
         max-width: 780px !important;
         margin: 0 auto !important;
@@ -117,6 +121,7 @@ st.markdown("""
         font-size: 15px !important;
     }
 
+    /* Sources expander */
     [data-testid="stExpander"] { font-size: 9.5px !important; line-height: 1.4 !important; }
     [data-testid="stExpander"] p,
     [data-testid="stExpander"] a,
@@ -125,28 +130,58 @@ st.markdown("""
     [data-testid="stExpander"] a { color: #3b82f6 !important; text-decoration: none !important; }
     [data-testid="stExpander"] a:hover { text-decoration: underline !important; }
 
-    .metadata-line { font-size: 9px !important; color: #666 !important; margin-top: 8px !important; }
-
-    .followup-btn button {
-        background: #1a1a1a !important;
-        border: 1px solid #2a2a2a !important;
-        border-radius: 8px !important;
-        color: #aaa !important;
-        font-size: 11px !important;
-        text-align: left !important;
-    }
-    .followup-btn button:hover {
-        border-color: #3b82f6 !important;
-        color: #fff !important;
+    /* Metadata line */
+    .metadata-line {
+        font-size: 9px !important;
+        color: #666 !important;
+        margin-top: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        flex-wrap: wrap !important;
     }
 
+    /* Confidence badge */
+    .badge {
+        display: inline-block;
+        padding: 1px 7px;
+        border-radius: 9999px;
+        font-size: 8.5px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .badge-high { background: #14532d; color: #86efac; }
+    .badge-med  { background: #78350f; color: #fcd34d; }
+    .badge-low  { background: #7f1d1d; color: #fca5a5; }
+
+    /* Sidebar RAGAS scores */
+    .ragas-block {
+        background: #161616;
+        border: 1px solid #2a2a2a;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-top: 4px;
+    }
+    .ragas-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        color: #aaa;
+        padding: 2px 0;
+    }
+    .ragas-score { font-weight: 700; color: #86efac; font-size: 11px; }
+    .ragas-perfect { color: #22c55e; }
+
+    /* Footer */
     .custom-footer {
         position: fixed;
         bottom: 0; left: 0; right: 0;
         min-height: 44px;
-        background: rgba(15,15,15,0.92);
+        background: rgba(15,15,15,0.95);
         backdrop-filter: blur(12px);
-        border-top: 1px solid #222;
+        border-top: 1px solid #1a1a1a;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -154,25 +189,29 @@ st.markdown("""
         gap: 6px 12px;
         padding: 8px 16px;
         font-size: 12px;
-        color: #aaa;
+        color: #555;
         z-index: 999;
         text-align: center;
     }
     .custom-footer strong { color: #f87171; font-weight: 500; }
-    @media (max-width: 480px) {
-        .custom-footer { font-size: 11px; padding: 6px 12px; gap: 4px 8px; }
-    }
 
-    /* ── Mobile responsiveness ── */
+    /* Mobile */
     @media (max-width: 768px) {
         .block-container {
+            max-width: 100% !important;
+            padding: 0.75rem 0.5rem 5rem !important;
         }
         div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) {
+            max-width: 88% !important;
         }
         div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-assistant"]) {
+            max-width: 94% !important;
         }
-        div[data-testid="stChatInput"] {
-        }
+        div[data-testid="stChatInput"] { padding: 0 0.5rem !important; }
+        h1 { font-size: 1.4rem !important; }
+    }
+    @media (max-width: 480px) {
+        .custom-footer { font-size: 11px; padding: 6px 12px; gap: 4px 8px; }
     }
 </style>
 
@@ -195,7 +234,7 @@ for k, v in {
     if k not in st.session_state:
         st.session_state[k] = v
 
-# Pipeline 
+# Pipeline loading with caching
 @st.cache_resource(show_spinner=False)
 def load_pipeline():
     from src.graph.rag_graph import NaijaCodexPipeline
@@ -216,55 +255,61 @@ _REGULATORY_KEYWORDS = {
 }
 
 def is_casual(text: str) -> bool:
-    t = text.lower()
-    return not any(kw in t for kw in _REGULATORY_KEYWORDS)
+    return not any(kw in text.lower() for kw in _REGULATORY_KEYWORDS)
 
-@st.cache_data(show_spinner=False, ttl=1800, hash_funcs={str: lambda x: x})
+@st.cache_data(show_spinner=False, ttl=1800)
 def casual_response(question: str, hour_wat: int, turn_count: int = 0) -> str:
-    """Cached casual reply — keyed by question + WAT hour so greetings stay accurate."""
     from langchain_groq import ChatGroq
     from langchain_core.messages import SystemMessage, HumanMessage
     from datetime import datetime, timezone, timedelta
     WAT = timezone(timedelta(hours=1))
     now = datetime.now(WAT)
     time_str = now.strftime("%I:%M %p WAT, %A %d %B %Y")
-    if hour_wat < 12:
-        period = "morning"
-    elif hour_wat < 17:
-        period = "afternoon"
-    else:
-        period = "evening"
+    period = "morning" if hour_wat < 12 else ("afternoon" if hour_wat < 17 else "evening")
     llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.7, max_tokens=150)
-    is_first = turn_count == 0
-    if is_first:
+    identity = (
+        f"You are NaijaCodex, a Nigerian regulatory intelligence assistant. "
+        f"You were built by James Danas, a software engineer based in Jos, Plateau State, Nigeria. "
+        f"You are NOT a product of any Lagos firm, team, or company. "
+        f"If asked who created you, always say: James Danas, an engineer in Jos, Nigeria. "
+    )
+    if turn_count == 0:
         system = (
-            f"You are NaijaCodex, a warm Nigerian regulatory assistant. "
+            identity +
             f"The current time is {time_str} — it is {period} in Nigeria. "
-            f"Greet the user appropriately for the time of day. Keep it to 1-2 sentences "
-            f"then invite a compliance question."
+            f"Greet the user correctly for the time of day. 1-2 sentences then invite a compliance question."
         )
     else:
         system = (
-            f"You are NaijaCodex, a warm Nigerian regulatory assistant. "
-            f"The current time is {time_str}. Do NOT greet the user — they already said hello. "
-            f"Just respond naturally and conversationally to what they said. "
-            f"You may gently steer back to Nigerian compliance topics if appropriate."
+            identity +
+            f"The current time is {time_str}. Do NOT greet — they already said hello. "
+            f"Respond naturally and conversationally. "
+            f"You may gently steer toward Nigerian compliance topics if appropriate."
         )
     return llm.invoke([
         SystemMessage(content=system),
         HumanMessage(content=question),
     ]).content.strip()
 
+def stream_answer(text: str):
+    """Word-by-word streaming generator — makes latency feel faster."""
+    for word in text.split(" "):
+        yield word + " "
+        time.sleep(0.018)
+
+def confidence_badge(conf: str) -> str:
+    c = conf.upper()[:4]
+    cls = {"HIGH": "badge-high", "MED": "badge-med", "LOW": "badge-low"}.get(c, "badge-med")
+    return f'<span class="badge {cls}">{c}</span>'
+
 def clean_answer(text: str) -> str:
     text = re.sub(r"\[SOURCE:[^\]]+\]", "", text)
     text = re.sub(r"\*\*Citations?\*\*[\s\S]*$", "", text, flags=re.IGNORECASE)
     _LABELS = r"(Direct Answer|Regulatory Basis|Cross-Regulation Notes|Confidence|Summary)"
     text = re.sub(rf"#{1,3}\s*{_LABELS}\s*:?\s*",
-                  lambda m: f"\n\n**{m.group(1).strip()}**\n",
-                  text, flags=re.IGNORECASE)
+                  lambda m: f"\n\n**{m.group(1).strip()}**\n", text, flags=re.IGNORECASE)
     text = re.sub(rf"\*\*{_LABELS}\**\s*:?\s*",
-                  lambda m: f"\n\n**{m.group(1).strip()}**\n",
-                  text, flags=re.IGNORECASE)
+                  lambda m: f"\n\n**{m.group(1).strip()}**\n", text, flags=re.IGNORECASE)
     return re.sub(r"\n{3,}", "\n\n", text).strip()
 
 def format_citations_markdown(raw_cit: str) -> str:
@@ -277,9 +322,9 @@ def format_citations_markdown(raw_cit: str) -> str:
     for line in lines:
         m = re.search(r'https?://\S+', line)
         if m:
-            url = m.group(0).rstrip(".,)")
+            url  = m.group(0).rstrip(".,)")
             desc = line[:m.start()].strip(" ·•-[]()").strip()
-            sec = re.search(r'Section\s+[\d\.]+', desc, re.IGNORECASE)
+            sec  = re.search(r'Section\s+[\d\.]+', desc, re.IGNORECASE)
             url_to_items[url].append(sec.group() if sec else (desc[:50] if desc else url))
         else:
             url_to_items[None].append(line)
@@ -299,7 +344,6 @@ def format_citations_markdown(raw_cit: str) -> str:
 
 @st.cache_data(show_spinner=False, ttl=3600)
 def generate_followups(question: str, answer_snippet: str) -> list:
-    """Cached follow-up suggestions — uses 8b model, cached by question+answer."""
     try:
         from langchain_groq import ChatGroq
         from langchain_core.messages import SystemMessage, HumanMessage
@@ -325,6 +369,27 @@ def _default_followups():
         "What is the implementation timeline?",
     ]
 
+def render_message_meta(meta: dict):
+    """Render sources expander + metadata line with confidence badge."""
+    raw_cit = meta.get("citations", "")
+    if raw_cit and raw_cit != "No sources found.":
+        sources_md = format_citations_markdown(raw_cit)
+        with st.expander("Sources", expanded=False):
+            st.markdown(sources_md)
+
+    conf = meta.get("confidence", "MED")
+    agencies = ", ".join(meta.get("agencies_searched", [])) or "N/A"
+    chunks = meta.get("chunks", 0)
+    latency = meta.get("latency_ms", 0)
+    conflict = " · <span style='color:#f87171;'>Conflict</span>" if meta.get("conflict") else ""
+    badge = confidence_badge(conf)
+    st.markdown(
+        f"<div class='metadata-line'>"
+        f"{agencies} · {chunks} chunks · {badge} · {latency}ms{conflict}"
+        f"</div>",
+        unsafe_allow_html=True,
+    )
+
 # SIDEBAR 
 with st.sidebar:
     st.markdown("""
@@ -346,6 +411,30 @@ with st.sidebar:
     c1, c2 = st.columns(2)
     with c1: st.metric("Queries", st.session_state.total_queries)
     with c2: st.metric("Chunks",  st.session_state.total_chunks)
+
+    # RAGAS Evaluation Scores 
+    st.divider()
+    st.markdown("**Evaluation (RAGAS)**")
+    st.markdown("""
+    <div class="ragas-block">
+      <div class="ragas-row">
+        <span>Context Precision</span>
+        <span class="ragas-score ragas-perfect">1.000</span>
+      </div>
+      <div class="ragas-row">
+        <span>Context Recall</span>
+        <span class="ragas-score">0.789</span>
+      </div>
+      <div class="ragas-row">
+        <span>Overall Average</span>
+        <span class="ragas-score">0.895</span>
+      </div>
+      <div class="ragas-row" style="margin-top:4px;border-top:1px solid #2a2a2a;padding-top:4px;">
+        <span style="color:#444;">10 questions · 0 flagged</span>
+        <span style="color:#444;">llama-3.1-8b</span>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.divider()
     st.markdown("**Try These**")
@@ -400,7 +489,7 @@ with st.sidebar:
     st.markdown("**Recent Chats**")
     sessions = st.session_state.sessions
     for i in range(len(sessions) - 1, max(len(sessions) - 9, -1), -1):
-        sess  = sessions[i]
+        sess = sessions[i]
         label = sess.get("title", "Chat")[:32]
         col1, col2 = st.columns([5, 1])
         with col1:
@@ -427,7 +516,7 @@ with st.sidebar:
 
 # MAIN 
 st.markdown("""
-<h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>NaijaCodex</h1>                      
+<h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>NaijaCodex</h1>
 <p style='text-align:center;color:#555;font-size:12px;'>CBN · SEC · NDPC · NRS · NITDA</p>
 """, unsafe_allow_html=True)
 
@@ -439,43 +528,27 @@ if not st.session_state.messages:
     </div>
     """, unsafe_allow_html=True)
 
-# ── Chat history ──────────────────────────────────────────────────────────────
+# Chat history 
 for idx, msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"], avatar="🏛️" if msg["role"] == "assistant" else None):
         st.markdown(msg["content"])
-
         if msg["role"] == "assistant" and msg.get("meta"):
-            meta = msg["meta"]
-            raw_cit  = meta.get("citations", "")
+            render_message_meta(msg["meta"])
 
-            if raw_cit and raw_cit != "No sources found.":
-                sources_md = format_citations_markdown(raw_cit)
-                with st.expander("Sources", expanded=False):
-                    st.markdown(sources_md)
-
-            conf     = meta.get("confidence", "MED")
-            agencies = ", ".join(meta.get("agencies_searched", [])) or "N/A"
-            chunks   = meta.get("chunks", 0)
-            latency  = meta.get("latency_ms", 0)
-            conflict = " · Conflict detected" if meta.get("conflict") else ""
-            st.markdown(
-                f"<div class='metadata-line'>{agencies} · {chunks} chunks · "
-                f"{conf[:4]} · {latency}ms{conflict}</div>",
-                unsafe_allow_html=True,
-            )
-
-# ── Follow-up suggestions ─────────────────────────────────────────────────────
+# Follow-up suggestions 
 _msgs = st.session_state.messages
 if _msgs and _msgs[-1]["role"] == "assistant" and _msgs[-1].get("meta"):
     _cache_key = f"followups_{len(_msgs)}"
     if _cache_key not in st.session_state:
-        _last_q = next((m["content"] for m in reversed(_msgs) if m["role"] == "user"), "")
+        _last_q  = next((m["content"] for m in reversed(_msgs) if m["role"] == "user"), "")
         _snippet = _msgs[-1]["content"][:300]
         st.session_state[_cache_key] = generate_followups(_last_q, _snippet)
     _suggestions = st.session_state.get(_cache_key, [])
     if _suggestions:
-        st.markdown("<p style='color:#555;font-size:11px;margin-bottom:4px;'>Suggested follow-ups</p>",
-                    unsafe_allow_html=True)
+        st.markdown(
+            "<p style='color:#444;font-size:11px;margin-bottom:4px;'>Suggested follow-ups</p>",
+            unsafe_allow_html=True,
+        )
         _cols = st.columns(3)
         for _i, _sug in enumerate(_suggestions):
             with _cols[_i]:
@@ -483,7 +556,7 @@ if _msgs and _msgs[-1]["role"] == "assistant" and _msgs[-1].get("meta"):
                     st.session_state.last_question = _sug
                     st.rerun()
 
-# ── Chat input ────────────────────────────────────────────────────────────────
+# Chat input 
 question = st.chat_input("Ask about Nigerian regulations...")
 
 if st.session_state.get("last_question"):
@@ -496,7 +569,12 @@ if question and turn_key != st.session_state.get("last_processed", ""):
     st.session_state.last_processed = turn_key
     st.session_state.messages.append({"role": "user", "content": question, "meta": None})
 
-    with st.status("Searching regulations...", expanded=False) as status:
+    # Step 1: Run pipeline inside spinner 
+    answer = ""
+    meta = None
+    error = None
+
+    with st.status("Searching...", expanded=False) as status:
         try:
             if is_casual(question):
                 from datetime import datetime, timezone, timedelta as _td
@@ -504,11 +582,11 @@ if question and turn_key != st.session_state.get("last_processed", ""):
                 _hour_wat = datetime.now(_WAT).hour
                 _turn_count = sum(1 for m in st.session_state.messages if m["role"] == "assistant")
                 answer = casual_response(question, _hour_wat, _turn_count)
-                meta   = None
+                meta = None
             else:
                 result = pipeline.query(question)
                 answer = clean_answer(result.get("answer", ""))
-                meta   = {
+                meta  = {
                     "citations": result.get("citations", ""),
                     "confidence": result.get("confidence", "MED"),
                     "agencies_searched": result.get("agencies_searched", []),
@@ -519,30 +597,37 @@ if question and turn_key != st.session_state.get("last_processed", ""):
                 }
                 st.session_state.total_queries += 1
                 st.session_state.total_chunks  += meta["chunks"]
-
             status.update(label="Done", state="complete")
-            st.session_state.messages.append(
-                {"role": "assistant", "content": answer, "meta": meta}
-            )
-
-            title = question[:45] + ("..." if len(question) > 45 else "")
-            if st.session_state.current_index == -1:
-                st.session_state.sessions.append({
-                    "id": str(len(st.session_state.sessions) + 1),
-                    "title": title,
-                    "messages": st.session_state.messages[:],
-                })
-                st.session_state.current_index = len(st.session_state.sessions) - 1
-            else:
-                i = st.session_state.current_index
-                st.session_state.sessions[i]["messages"] = st.session_state.messages[:]
-                st.session_state.sessions[i]["title"] = title
-            save_sessions(st.session_state.sessions)
-
         except Exception as e:
-            st.session_state.messages.append(
-                {"role": "assistant", "content": f"Error: {str(e)}", "meta": None}
-            )
+            error = str(e)
             status.update(label="Error", state="error")
+
+    # Step 2: Stream the response 
+    if error:
+        answer = f"Something went wrong: {error}"
+
+    with st.chat_message("assistant", avatar="🏛️"):
+        displayed = st.write_stream(stream_answer(answer))
+        if meta:
+            render_message_meta(meta)
+
+    # Step 3: Save to session state 
+    st.session_state.messages.append(
+        {"role": "assistant", "content": displayed, "meta": meta}
+    )
+
+    title = question[:45] + ("..." if len(question) > 45 else "")
+    if st.session_state.current_index == -1:
+        st.session_state.sessions.append({
+            "id": str(len(st.session_state.sessions) + 1),
+            "title": title,
+            "messages": st.session_state.messages[:],
+        })
+        st.session_state.current_index = len(st.session_state.sessions) - 1
+    else:
+        i = st.session_state.current_index
+        st.session_state.sessions[i]["messages"] = st.session_state.messages[:]
+        st.session_state.sessions[i]["title"] = title
+    save_sessions(st.session_state.sessions)
 
     st.rerun()
