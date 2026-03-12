@@ -21,7 +21,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Persistence ───────────────────────────────────────────────────────────────
+# Persistence 
 SESSIONS_FILE = Path("naijacodex_sessions.json")
 
 def load_sessions():
@@ -41,7 +41,7 @@ def save_sessions(sessions_list):
     except Exception:
         pass
 
-# ── CSS ───────────────────────────────────────────────────────────────────────
+# CSS 
 st.markdown("""
 <style>
     :root {
@@ -143,19 +143,37 @@ st.markdown("""
     .custom-footer {
         position: fixed;
         bottom: 0; left: 0; right: 0;
-        height: 44px;
+        min-height: 44px;
         background: rgba(15,15,15,0.92);
         backdrop-filter: blur(12px);
         border-top: 1px solid #222;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 13px;
+        flex-wrap: wrap;
+        gap: 6px 12px;
+        padding: 8px 16px;
+        font-size: 12px;
         color: #aaa;
         z-index: 999;
-        gap: 16px;
+        text-align: center;
     }
     .custom-footer strong { color: #f87171; font-weight: 500; }
+    @media (max-width: 480px) {
+        .custom-footer { font-size: 11px; padding: 6px 12px; gap: 4px 8px; }
+    }
+
+    /* ── Mobile responsiveness ── */
+    @media (max-width: 768px) {
+        .block-container {
+        }
+        div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) {
+        }
+        div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-assistant"]) {
+        }
+        div[data-testid="stChatInput"] {
+        }
+    }
 </style>
 
 <div class="custom-footer">
@@ -163,7 +181,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── Session state ─────────────────────────────────────────────────────────────
+# Session state 
 for k, v in {
     "messages": [],
     "sessions": load_sessions(),
@@ -177,7 +195,7 @@ for k, v in {
     if k not in st.session_state:
         st.session_state[k] = v
 
-# ── Pipeline ──────────────────────────────────────────────────────────────────
+# Pipeline 
 @st.cache_resource(show_spinner=False)
 def load_pipeline():
     from src.graph.rag_graph import NaijaCodexPipeline
@@ -190,7 +208,7 @@ if not st.session_state.pipeline_ready:
 else:
     pipeline = load_pipeline()
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# Helpers 
 _REGULATORY_KEYWORDS = {
     "cbn","sec","ndpc","nrs","nitda","cyber","penalty","compliance","regulation",
     "bank","tax","fintech","data protection","capital","securities","law","act",
@@ -201,17 +219,39 @@ def is_casual(text: str) -> bool:
     t = text.lower()
     return not any(kw in t for kw in _REGULATORY_KEYWORDS)
 
-@st.cache_data(show_spinner=False, ttl=3600)
-def casual_response(question: str) -> str:
-    """Cached casual reply — uses 8b model for speed."""
+@st.cache_data(show_spinner=False, ttl=1800, hash_funcs={str: lambda x: x})
+def casual_response(question: str, hour_wat: int, turn_count: int = 0) -> str:
+    """Cached casual reply — keyed by question + WAT hour so greetings stay accurate."""
     from langchain_groq import ChatGroq
     from langchain_core.messages import SystemMessage, HumanMessage
-    llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.7, max_tokens=120)
+    from datetime import datetime, timezone, timedelta
+    WAT = timezone(timedelta(hours=1))
+    now = datetime.now(WAT)
+    time_str = now.strftime("%I:%M %p WAT, %A %d %B %Y")
+    if hour_wat < 12:
+        period = "morning"
+    elif hour_wat < 17:
+        period = "afternoon"
+    else:
+        period = "evening"
+    llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.7, max_tokens=150)
+    is_first = turn_count == 0
+    if is_first:
+        system = (
+            f"You are NaijaCodex, a warm Nigerian regulatory assistant. "
+            f"The current time is {time_str} — it is {period} in Nigeria. "
+            f"Greet the user appropriately for the time of day. Keep it to 1-2 sentences "
+            f"then invite a compliance question."
+        )
+    else:
+        system = (
+            f"You are NaijaCodex, a warm Nigerian regulatory assistant. "
+            f"The current time is {time_str}. Do NOT greet the user — they already said hello. "
+            f"Just respond naturally and conversationally to what they said. "
+            f"You may gently steer back to Nigerian compliance topics if appropriate."
+        )
     return llm.invoke([
-        SystemMessage(content=(
-            "You are NaijaCodex, a warm Nigerian regulatory assistant. "
-            "For greetings reply in 1-2 sentences and invite a compliance question."
-        )),
+        SystemMessage(content=system),
         HumanMessage(content=question),
     ]).content.strip()
 
@@ -237,9 +277,9 @@ def format_citations_markdown(raw_cit: str) -> str:
     for line in lines:
         m = re.search(r'https?://\S+', line)
         if m:
-            url  = m.group(0).rstrip(".,)")
+            url = m.group(0).rstrip(".,)")
             desc = line[:m.start()].strip(" ·•-[]()").strip()
-            sec  = re.search(r'Section\s+[\d\.]+', desc, re.IGNORECASE)
+            sec = re.search(r'Section\s+[\d\.]+', desc, re.IGNORECASE)
             url_to_items[url].append(sec.group() if sec else (desc[:50] if desc else url))
         else:
             url_to_items[None].append(line)
@@ -250,7 +290,7 @@ def format_citations_markdown(raw_cit: str) -> str:
         elif len(items) == 1:
             md.append(f"- [{items[0]}]({url})")
         else:
-            doc  = items[0].split(" Section")[0].strip()
+            doc = items[0].split(" Section")[0].strip()
             secs = [re.search(r'Section\s+([\d\.]+)', it, re.IGNORECASE) for it in items]
             nums = [s.group(1) for s in secs if s]
             label = f"{doc} — Sections {', '.join(nums)}" if nums else "; ".join(items)
@@ -285,7 +325,7 @@ def _default_followups():
         "What is the implementation timeline?",
     ]
 
-# ── SIDEBAR ───────────────────────────────────────────────────────────────────
+# SIDEBAR 
 with st.sidebar:
     st.markdown("""
     <div style='text-align:center;padding:8px 0;'>
@@ -344,10 +384,10 @@ with st.sidebar:
     st.divider()
     st.markdown("**Regulatory Bodies**")
     for short, url in [
-        ("CBN",   "https://www.cbn.gov.ng"),
-        ("SEC",   "https://home.sec.gov.ng"),
-        ("NDPC",  "https://ndpc.gov.ng"),
-        ("NRS",   "https://nrs.gov.ng"),
+        ("CBN", "https://www.cbn.gov.ng"),
+        ("SEC", "https://home.sec.gov.ng"),
+        ("NDPC", "https://ndpc.gov.ng"),
+        ("NRS", "https://nrs.gov.ng"),
         ("NITDA", "https://nitda.gov.ng"),
     ]:
         st.markdown(
@@ -385,9 +425,9 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-# ── MAIN ──────────────────────────────────────────────────────────────────────
+# MAIN 
 st.markdown("""
-<h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>NaijaCodex</h1>
+<h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>NaijaCodex</h1>                      
 <p style='text-align:center;color:#555;font-size:12px;'>CBN · SEC · NDPC · NRS · NITDA</p>
 """, unsafe_allow_html=True)
 
@@ -405,7 +445,7 @@ for idx, msg in enumerate(st.session_state.messages):
         st.markdown(msg["content"])
 
         if msg["role"] == "assistant" and msg.get("meta"):
-            meta     = msg["meta"]
+            meta = msg["meta"]
             raw_cit  = meta.get("citations", "")
 
             if raw_cit and raw_cit != "No sources found.":
@@ -459,19 +499,23 @@ if question and turn_key != st.session_state.get("last_processed", ""):
     with st.status("Searching regulations...", expanded=False) as status:
         try:
             if is_casual(question):
-                answer = casual_response(question)
+                from datetime import datetime, timezone, timedelta as _td
+                _WAT = timezone(_td(hours=1))
+                _hour_wat = datetime.now(_WAT).hour
+                _turn_count = sum(1 for m in st.session_state.messages if m["role"] == "assistant")
+                answer = casual_response(question, _hour_wat, _turn_count)
                 meta   = None
             else:
                 result = pipeline.query(question)
                 answer = clean_answer(result.get("answer", ""))
                 meta   = {
-                    "citations":        result.get("citations", ""),
-                    "confidence":       result.get("confidence", "MED"),
+                    "citations": result.get("citations", ""),
+                    "confidence": result.get("confidence", "MED"),
                     "agencies_searched": result.get("agencies_searched", []),
-                    "chunks":           len(result.get("retrieved_docs", [])),
-                    "query_id":         result.get("query_id", ""),
-                    "latency_ms":       result.get("latency_ms", 0),
-                    "conflict":         result.get("conflicts_found", False),
+                    "chunks": len(result.get("retrieved_docs", [])),
+                    "query_id": result.get("query_id", ""),
+                    "latency_ms": result.get("latency_ms", 0),
+                    "conflict": result.get("conflicts_found", False),
                 }
                 st.session_state.total_queries += 1
                 st.session_state.total_chunks  += meta["chunks"]
@@ -484,15 +528,15 @@ if question and turn_key != st.session_state.get("last_processed", ""):
             title = question[:45] + ("..." if len(question) > 45 else "")
             if st.session_state.current_index == -1:
                 st.session_state.sessions.append({
-                    "id":       str(len(st.session_state.sessions) + 1),
-                    "title":    title,
+                    "id": str(len(st.session_state.sessions) + 1),
+                    "title": title,
                     "messages": st.session_state.messages[:],
                 })
                 st.session_state.current_index = len(st.session_state.sessions) - 1
             else:
                 i = st.session_state.current_index
                 st.session_state.sessions[i]["messages"] = st.session_state.messages[:]
-                st.session_state.sessions[i]["title"]    = title
+                st.session_state.sessions[i]["title"] = title
             save_sessions(st.session_state.sessions)
 
         except Exception as e:
