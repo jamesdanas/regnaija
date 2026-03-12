@@ -1,11 +1,5 @@
 """
 streamlit_app.py — NaijaCodex front-end built with Streamlit.
-Features:
-- Clean, modern UI with custom CSS
-- Chat interface with user/assistant bubbles
-- Sidebar for new chats, recent sessions, and document upload
-- Dynamic follow-up question suggestions (lazy/async)
-- Session persistence (local JSON — note: ephemeral on Streamlit Cloud)
 """
 import re
 import json
@@ -27,7 +21,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─ Persistence 
+# ── Persistence ───────────────────────────────────────────────────────────────
 SESSIONS_FILE = Path("naijacodex_sessions.json")
 
 def load_sessions():
@@ -45,13 +39,11 @@ def save_sessions(sessions_list):
             encoding="utf-8",
         )
     except Exception:
-        pass  # Silently fail on ephemeral filesystems (Streamlit Cloud)
+        pass
 
-#  CSS 
+# ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
     :root {
         --bg: #0f0f0f;
         --chat-bg-user: linear-gradient(135deg, #1d4ed8, #3b82f6);
@@ -59,15 +51,15 @@ st.markdown("""
         --border: rgba(59, 130, 246, 0.18);
         --text: #e5e7eb;
         --muted: #9ca3af;
+        --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     }
 
     html, body, [data-testid="stAppViewContainer"] {
         background: var(--bg) !important;
         color: var(--text) !important;
-        font-family: 'Inter', system-ui, sans-serif !important;
+        font-family: var(--font) !important;
     }
 
-    /* Keep header visible so sidebar toggle appears */
     header {
         visibility: visible !important;
         background: transparent !important;
@@ -87,7 +79,6 @@ st.markdown("""
         margin: 0 auto !important;
     }
 
-    /* ── User messages — right aligned, blue gradient ── */
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"]) {
         margin-left: auto !important;
         margin-right: 0 !important;
@@ -101,7 +92,6 @@ st.markdown("""
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-user"])
         [data-testid="chatMessageContent"] { color: white !important; }
 
-    /* ── Assistant messages — left aligned, dark ── */
     div[data-testid="stChatMessage"]:has(div[data-testid="chatAvatarIcon-assistant"]) {
         margin-right: auto !important;
         margin-left: 0 !important;
@@ -113,7 +103,6 @@ st.markdown("""
         box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
     }
 
-    /* ── Chat input ── */
     div[data-testid="stChatInput"] {
         max-width: 780px !important;
         margin: 0 auto !important;
@@ -128,7 +117,6 @@ st.markdown("""
         font-size: 15px !important;
     }
 
-    /* ── Expander — small font for sources ── */
     [data-testid="stExpander"] { font-size: 9.5px !important; line-height: 1.4 !important; }
     [data-testid="stExpander"] p,
     [data-testid="stExpander"] a,
@@ -137,10 +125,8 @@ st.markdown("""
     [data-testid="stExpander"] a { color: #3b82f6 !important; text-decoration: none !important; }
     [data-testid="stExpander"] a:hover { text-decoration: underline !important; }
 
-    /* ── Metadata line ── */
     .metadata-line { font-size: 9px !important; color: #666 !important; margin-top: 8px !important; }
 
-    /* ── Follow-up suggestion buttons ── */
     .followup-btn button {
         background: #1a1a1a !important;
         border: 1px solid #2a2a2a !important;
@@ -154,7 +140,6 @@ st.markdown("""
         color: #fff !important;
     }
 
-    /* ── Footer ── */
     .custom-footer {
         position: fixed;
         bottom: 0; left: 0; right: 0;
@@ -174,11 +159,11 @@ st.markdown("""
 </style>
 
 <div class="custom-footer">
-    <strong>⚠️ Not legal advice</strong> • Official sources only • Built by James Danas
+    <strong>⚠️ Not legal advice</strong> &nbsp;·&nbsp; Official sources only &nbsp;·&nbsp; Built by James Danas
 </div>
 """, unsafe_allow_html=True)
 
-# ── Session state ────────────────────────────────────────────────────────────
+# ── Session state ─────────────────────────────────────────────────────────────
 for k, v in {
     "messages": [],
     "sessions": load_sessions(),
@@ -188,13 +173,12 @@ for k, v in {
     "pipeline_ready": False,
     "last_question": "",
     "last_processed": "",
-    "pending_followups": None,   # lazy follow-ups stored here
 }.items():
     if k not in st.session_state:
         st.session_state[k] = v
 
-# Pipeline 
-@st.cache_resource
+# ── Pipeline ──────────────────────────────────────────────────────────────────
+@st.cache_resource(show_spinner=False)
 def load_pipeline():
     from src.graph.rag_graph import NaijaCodexPipeline
     return NaijaCodexPipeline()
@@ -206,47 +190,49 @@ if not st.session_state.pipeline_ready:
 else:
     pipeline = load_pipeline()
 
-#  Helpers 
-def is_casual(text: str) -> bool:
-    return not any(s in text.lower() for s in [
-        "cbn","sec","ndpc","nrs","nitda","cyber","penalty","compliance","regulation",
-        "bank","tax","fintech","data protection","capital","securities","law","act",
-    ])
+# ── Helpers ───────────────────────────────────────────────────────────────────
+_REGULATORY_KEYWORDS = {
+    "cbn","sec","ndpc","nrs","nitda","cyber","penalty","compliance","regulation",
+    "bank","tax","fintech","data protection","capital","securities","law","act",
+    "license","licence","circular","guideline","framework","directive","policy",
+}
 
+def is_casual(text: str) -> bool:
+    t = text.lower()
+    return not any(kw in t for kw in _REGULATORY_KEYWORDS)
+
+@st.cache_data(show_spinner=False, ttl=3600)
 def casual_response(question: str) -> str:
+    """Cached casual reply — uses 8b model for speed."""
     from langchain_groq import ChatGroq
     from langchain_core.messages import SystemMessage, HumanMessage
-    llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.7, max_tokens=150)
+    llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.7, max_tokens=120)
     return llm.invoke([
-        SystemMessage(content="You are NaijaCodex, a warm Nigerian regulatory expert. "
-                               "Keep greetings to 1-3 sentences and invite a compliance question."),
+        SystemMessage(content=(
+            "You are NaijaCodex, a warm Nigerian regulatory assistant. "
+            "For greetings reply in 1-2 sentences and invite a compliance question."
+        )),
         HumanMessage(content=question),
     ]).content.strip()
 
 def clean_answer(text: str) -> str:
-    """Remove SOURCE tags, Citations section, and force section labels to
-    bold inline (never ## headings), with response text on the next line."""
     text = re.sub(r"\[SOURCE:[^\]]+\]", "", text)
     text = re.sub(r"\*\*Citations?\*\*[\s\S]*$", "", text, flags=re.IGNORECASE)
     _LABELS = r"(Direct Answer|Regulatory Basis|Cross-Regulation Notes|Confidence|Summary)"
-    # Kill any ## headings the LLM may have emitted
     text = re.sub(rf"#{1,3}\s*{_LABELS}\s*:?\s*",
                   lambda m: f"\n\n**{m.group(1).strip()}**\n",
                   text, flags=re.IGNORECASE)
-    # Normalise **Label** : → bold label + newline
     text = re.sub(rf"\*\*{_LABELS}\**\s*:?\s*",
                   lambda m: f"\n\n**{m.group(1).strip()}**\n",
                   text, flags=re.IGNORECASE)
     return re.sub(r"\n{3,}", "\n\n", text).strip()
 
 def format_citations_markdown(raw_cit: str) -> str:
-    """Group citations by URL and render as clickable markdown links."""
     if not raw_cit or raw_cit == "No sources found.":
         return ""
     lines = [l.strip() for l in raw_cit.strip().split("\n") if l.strip()]
     if not lines:
         return ""
-
     url_to_items = defaultdict(list)
     for line in lines:
         m = re.search(r'https?://\S+', line)
@@ -257,7 +243,6 @@ def format_citations_markdown(raw_cit: str) -> str:
             url_to_items[url].append(sec.group() if sec else (desc[:50] if desc else url))
         else:
             url_to_items[None].append(line)
-
     md = []
     for url, items in url_to_items.items():
         if url is None:
@@ -272,38 +257,39 @@ def format_citations_markdown(raw_cit: str) -> str:
             md.append(f"- [{label}]({url})")
     return "\n".join(md)
 
-def generate_followups(question: str, answer: str) -> list:
-    """Generate 3 follow-up questions synchronously.
-    Called inside st.status() so latency is hidden behind the existing spinner."""
+@st.cache_data(show_spinner=False, ttl=3600)
+def generate_followups(question: str, answer_snippet: str) -> list:
+    """Cached follow-up suggestions — uses 8b model, cached by question+answer."""
     try:
         from langchain_groq import ChatGroq
         from langchain_core.messages import SystemMessage, HumanMessage
-        llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.6, max_tokens=120)
-        prompt = (f"User asked: {question}\nAnswer: {answer[:400]}\n"
-                  "Generate exactly 3 short follow-up questions (max 12 words each). "
-                  "Output one per line, no numbering, no bullet points.")
+        llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.5, max_tokens=100)
+        prompt = (
+            f"User asked: {question}\nAnswer summary: {answer_snippet[:300]}\n"
+            "Generate exactly 3 short follow-up questions (max 10 words each). "
+            "One per line, no numbering, no bullets."
+        )
         resp = llm.invoke([
-            SystemMessage(content="You are a helpful regulatory assistant."),
+            SystemMessage(content="You are a regulatory assistant. Be concise."),
             HumanMessage(content=prompt),
         ]).content
         qs = [q.strip("-• 1234567890.").strip() for q in resp.split("\n") if q.strip()][:3]
-        return qs if len(qs) == 3 else [
-            "What are the penalties for non-compliance?",
-            "How does this compare to 2022 guidelines?",
-            "What is the implementation timeline for fintechs?",
-        ]
+        return qs if len(qs) == 3 else _default_followups()
     except Exception:
-        return [
-            "What are the penalties for non-compliance?",
-            "How does this compare to 2022 guidelines?",
-            "What is the implementation timeline for fintechs?",
-        ]
+        return _default_followups()
+
+def _default_followups():
+    return [
+        "What are the penalties for non-compliance?",
+        "How does this apply to fintechs specifically?",
+        "What is the implementation timeline?",
+    ]
 
 # ── SIDEBAR ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
     <div style='text-align:center;padding:8px 0;'>
-      <div style='font-size:2.4rem;'>🏛️</div>
+      <div style='font-size:2.2rem;'>🏛️</div>
       <h1 style='margin:0;color:#e0e0e0;font-size:1.3rem;'>NaijaCodex</h1>
       <p style='color:#555;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'>
         Regulatory Intelligence
@@ -311,10 +297,9 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("＋ New Chat", use_container_width=True, type="primary"):
-        st.session_state.current_index   = -1
-        st.session_state.messages        = []
-        st.session_state.pending_followups = None
+    if st.button("+ New Chat", use_container_width=True, type="primary"):
+        st.session_state.current_index = -1
+        st.session_state.messages      = []
         st.rerun()
 
     st.divider()
@@ -337,10 +322,10 @@ with st.sidebar:
             st.rerun()
 
     st.divider()
-    st.markdown("**Upload Regulatory Document**")
-    st.caption("Uploaded files are not persisted on Streamlit Cloud.")
+    st.markdown("**Upload Document**")
+    st.caption("Not persisted on Streamlit Cloud.")
     uploaded = st.file_uploader("PDF or TXT", type=["pdf", "txt"], key="sidebar_upload")
-    if uploaded and st.button("Ingest Document", type="primary", use_container_width=True):
+    if uploaded and st.button("Ingest", type="primary", use_container_width=True):
         with st.spinner("Ingesting..."):
             try:
                 import tempfile
@@ -348,46 +333,43 @@ with st.sidebar:
                 with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
                     tmp.write(uploaded.getvalue())
                     tmp_path = tmp.name
-                # FIX 3: guard against missing method
                 if hasattr(pipeline, "ingest_document"):
                     pipeline.ingest_document(tmp_path)
                     st.success(f"{uploaded.name} ingested!")
                 else:
-                    st.warning("Document ingestion not yet supported via UI.")
+                    st.warning("Ingestion not available via UI.")
             except Exception as e:
                 st.error(f"Failed: {str(e)[:120]}")
 
     st.divider()
     st.markdown("**Regulatory Bodies**")
     for short, url in [
-        ("CBN", "https://www.cbn.gov.ng"),
-        ("SEC", "https://home.sec.gov.ng"),
-        ("NDPC", "https://ndpc.gov.ng"),
-        ("NRS", "https://nrs.gov.ng"),
+        ("CBN",   "https://www.cbn.gov.ng"),
+        ("SEC",   "https://home.sec.gov.ng"),
+        ("NDPC",  "https://ndpc.gov.ng"),
+        ("NRS",   "https://nrs.gov.ng"),
         ("NITDA", "https://nitda.gov.ng"),
     ]:
         st.markdown(
             f'<a href="{url}" target="_blank" style="color:#ccc;text-decoration:none;">'
-            f'<strong>{short}</strong> ↗</a>',
+            f'<strong>{short}</strong> &nearr;</a>',
             unsafe_allow_html=True,
         )
 
     st.divider()
     st.markdown("**Recent Chats**")
-    # FIX 6: correct delete index — iterate with real index, no reversed()
     sessions = st.session_state.sessions
     for i in range(len(sessions) - 1, max(len(sessions) - 9, -1), -1):
         sess  = sessions[i]
         label = sess.get("title", "Chat")[:32]
         col1, col2 = st.columns([5, 1])
         with col1:
-            if st.button(f"↩ {label}...", key=f"load_{i}", use_container_width=True):
+            if st.button(f"{label}...", key=f"load_{i}", use_container_width=True):
                 st.session_state.current_index = i
                 st.session_state.messages = sess["messages"][:]
-                st.session_state.pending_followups = None
                 st.rerun()
         with col2:
-            if st.button("🗑", key=f"del_{i}", help="Delete"):
+            if st.button("x", key=f"del_{i}", help="Delete"):
                 st.session_state.sessions.pop(i)
                 save_sessions(st.session_state.sessions)
                 if st.session_state.current_index >= len(st.session_state.sessions):
@@ -397,79 +379,63 @@ with st.sidebar:
 
     st.divider()
     st.markdown("""
-    <div style='color:#1e1e1e;font-size:10px;text-align:center;line-height:2;'>
-      Built by <strong style='color:#2a2a2a;'>James Danas</strong><br>
-      v1.0 · LangGraph · Pinecone · Groq · BAAI/bge
+    <div style='color:#333;font-size:10px;text-align:center;line-height:2;'>
+      Built by <strong style='color:#444;'>James Danas</strong><br>
+      v1.0 · LangGraph · Pinecone · Groq
     </div>
     """, unsafe_allow_html=True)
 
-
-# MAIN 
+# ── MAIN ──────────────────────────────────────────────────────────────────────
 st.markdown("""
-<h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>🏛️ NaijaCodex</h1>
+<h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>NaijaCodex</h1>
 <p style='text-align:center;color:#555;font-size:12px;'>CBN · SEC · NDPC · NRS · NITDA</p>
 """, unsafe_allow_html=True)
 
 if not st.session_state.messages:
     st.markdown("""
     <div style='text-align:center;padding:80px 20px;'>
-      <div style='font-size:4rem;margin-bottom:20px;'></div>
       <h2 style='color:#444;'>Ask anything about Nigerian regulations</h2>
-      <p style='color:#333;'>Powered by RAG · Citation-backed · Use sidebar for example questions</p>
+      <p style='color:#333;'>RAG-powered · Citation-backed · Use sidebar for examples</p>
     </div>
     """, unsafe_allow_html=True)
 
-# Chat history 
+# ── Chat history ──────────────────────────────────────────────────────────────
 for idx, msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"], avatar="🏛️" if msg["role"] == "assistant" else None):
         st.markdown(msg["content"])
 
         if msg["role"] == "assistant" and msg.get("meta"):
-            meta = msg["meta"]
-            raw_cit = meta.get("citations", "")
+            meta     = msg["meta"]
+            raw_cit  = meta.get("citations", "")
 
             if raw_cit and raw_cit != "No sources found.":
                 sources_md = format_citations_markdown(raw_cit)
-                with st.expander("📎 Official Sources", expanded=False):
+                with st.expander("Sources", expanded=False):
                     st.markdown(sources_md)
 
-            conf = meta.get("confidence", "MED")
+            conf     = meta.get("confidence", "MED")
             agencies = ", ".join(meta.get("agencies_searched", [])) or "N/A"
-            chunks = meta.get("chunks", 0)
-            qid = meta.get("query_id", "")
-            latency = meta.get("latency_ms", 0)
-            conflict = " · Conflict" if meta.get("conflict") else ""
+            chunks   = meta.get("chunks", 0)
+            latency  = meta.get("latency_ms", 0)
+            conflict = " · Conflict detected" if meta.get("conflict") else ""
             st.markdown(
-                f"<div class='metadata-line'>{qid} · {agencies} · "
-                f"{chunks} chunks · {conf[:4]} · {latency}ms{conflict}</div>",
+                f"<div class='metadata-line'>{agencies} · {chunks} chunks · "
+                f"{conf[:4]} · {latency}ms{conflict}</div>",
                 unsafe_allow_html=True,
             )
 
-        # Copy button
-        if msg["role"] == "assistant":
-            if st.button("Copy", key=f"copy_{idx}"):
-                full = msg["content"]
-                if msg.get("meta"):
-                    raw_cit = msg["meta"].get("citations", "")
-                    if raw_cit and raw_cit != "No sources found.":
-                        full += "\n\nSources:\n" + raw_cit
-                st.markdown(
-                    f"<script>navigator.clipboard.writeText({json.dumps(full)});</script>",
-                    unsafe_allow_html=True,
-                )
-                st.toast("Copied!", icon="")
-
-# Follow-up suggestions 
-# Cache by message count — no LLM call on plain reruns, no stale key clashes
+# ── Follow-up suggestions ─────────────────────────────────────────────────────
 _msgs = st.session_state.messages
 if _msgs and _msgs[-1]["role"] == "assistant" and _msgs[-1].get("meta"):
     _cache_key = f"followups_{len(_msgs)}"
     if _cache_key not in st.session_state:
         _last_q = next((m["content"] for m in reversed(_msgs) if m["role"] == "user"), "")
-        st.session_state[_cache_key] = generate_followups(_last_q, _msgs[-1]["content"])
+        _snippet = _msgs[-1]["content"][:300]
+        st.session_state[_cache_key] = generate_followups(_last_q, _snippet)
     _suggestions = st.session_state.get(_cache_key, [])
     if _suggestions:
-        st.markdown("**💡 Suggested follow-ups**")
+        st.markdown("<p style='color:#555;font-size:11px;margin-bottom:4px;'>Suggested follow-ups</p>",
+                    unsafe_allow_html=True)
         _cols = st.columns(3)
         for _i, _sug in enumerate(_suggestions):
             with _cols[_i]:
@@ -477,71 +443,62 @@ if _msgs and _msgs[-1]["role"] == "assistant" and _msgs[-1].get("meta"):
                     st.session_state.last_question = _sug
                     st.rerun()
 
-# Chat input 
+# ── Chat input ────────────────────────────────────────────────────────────────
 question = st.chat_input("Ask about Nigerian regulations...")
 
 if st.session_state.get("last_question"):
     question = st.session_state.last_question
     st.session_state.last_question = ""
 
-# dedup by content+turn-count, not just content string
 turn_key = f"{question}_{len(st.session_state.messages)}" if question else ""
 
 if question and turn_key != st.session_state.get("last_processed", ""):
     st.session_state.last_processed = turn_key
-    st.session_state.pending_followups = None
     st.session_state.messages.append({"role": "user", "content": question, "meta": None})
 
-    with st.status("Searching official regulations...", expanded=True) as status:
-        status.update(label="Processing...", state="running")
+    with st.status("Searching regulations...", expanded=False) as status:
         try:
             if is_casual(question):
                 answer = casual_response(question)
-                meta = None
+                meta   = None
             else:
                 result = pipeline.query(question)
                 answer = clean_answer(result.get("answer", ""))
-                raw_cit = result.get("citations", "")
-                conf = result.get("confidence", "MED")
-                agencies = result.get("agencies_searched", [])
-                chunks = len(result.get("retrieved_docs", []))
-                qid = result.get("query_id", "")
-                latency = result.get("latency_ms", 0)
-                conflict = result.get("conflicts_found", False)
-                meta = {
-                    "citations": raw_cit,
-                    "confidence": conf,
-                    "agencies_searched": agencies,
-                    "chunks": chunks,
-                    "query_id": qid,
-                    "latency_ms": latency,
-                    "conflict": conflict,
+                meta   = {
+                    "citations":        result.get("citations", ""),
+                    "confidence":       result.get("confidence", "MED"),
+                    "agencies_searched": result.get("agencies_searched", []),
+                    "chunks":           len(result.get("retrieved_docs", [])),
+                    "query_id":         result.get("query_id", ""),
+                    "latency_ms":       result.get("latency_ms", 0),
+                    "conflict":         result.get("conflicts_found", False),
                 }
                 st.session_state.total_queries += 1
-                st.session_state.total_chunks  += chunks
+                st.session_state.total_chunks  += meta["chunks"]
 
-            status.update(label="Answer ready", state="complete")
-            st.session_state.messages.append({"role": "assistant", "content": answer, "meta": meta})
+            status.update(label="Done", state="complete")
+            st.session_state.messages.append(
+                {"role": "assistant", "content": answer, "meta": meta}
+            )
 
-            # FIX 4: note about ephemeral filesystem
             title = question[:45] + ("..." if len(question) > 45 else "")
             if st.session_state.current_index == -1:
                 st.session_state.sessions.append({
-                    "id": str(len(st.session_state.sessions) + 1),
-                    "title": title,
+                    "id":       str(len(st.session_state.sessions) + 1),
+                    "title":    title,
                     "messages": st.session_state.messages[:],
                 })
                 st.session_state.current_index = len(st.session_state.sessions) - 1
             else:
-                idx = st.session_state.current_index
-                st.session_state.sessions[idx]["messages"] = st.session_state.messages[:]
-                st.session_state.sessions[idx]["title"] = title
+                i = st.session_state.current_index
+                st.session_state.sessions[i]["messages"] = st.session_state.messages[:]
+                st.session_state.sessions[i]["title"]    = title
             save_sessions(st.session_state.sessions)
 
         except Exception as e:
-            st.session_state.messages.append({
-                "role": "assistant", "content": f"Error: {str(e)}", "meta": None,
-            })
-            status.update(label="Error occurred", state="error")
+            st.session_state.messages.append(
+                {"role": "assistant", "content": f"Error: {str(e)}", "meta": None}
+            )
+            status.update(label="Error", state="error")
 
     st.rerun()
