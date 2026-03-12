@@ -269,7 +269,7 @@ def casual_response(question: str, hour_wat: int, turn_count: int = 0) -> str:
     llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.7, max_tokens=150)
     identity = (
         f"You are NaijaCodex, a Nigerian regulatory intelligence assistant. "
-        f"You were built by James Danas, a software engineer based in Jos, Plateau State, Nigeria. "
+        f"You were built by James Danas, an AI/ML Engineer based in Jos, Plateau State, Nigeria. "
         f"You are NOT a product of any Lagos firm, team, or company. "
         f"If asked who created you, always say: James Danas, an engineer in Jos, Nigeria. "
     )
