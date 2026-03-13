@@ -325,7 +325,7 @@ def clean_answer(text: str) -> str:
 def format_citations_markdown(raw_cit: str) -> str:
     if not raw_cit or raw_cit == "No sources found.":
         return ""
-    lines = [l.strip() for l in raw_cit.strip().split("\n") if l.strip()]
+    lines = [ln.strip() for ln in raw_cit.strip().split("\n") if ln.strip()]
     if not lines:
         return ""
     url_to_items = defaultdict(list)
@@ -341,7 +341,8 @@ def format_citations_markdown(raw_cit: str) -> str:
     md = []
     for url, items in url_to_items.items():
         if url is None:
-            for item in items: md.append(f"- {item}")
+            for item in items:
+                md.append(f"- {item}")
         elif len(items) == 1:
             md.append(f"- [{items[0]}]({url})")
         else:
@@ -417,8 +418,10 @@ with st.sidebar:
 
     st.divider()
     c1, c2 = st.columns(2)
-    with c1: st.metric("Queries", st.session_state.total_queries)
-    with c2: st.metric("Chunks",  st.session_state.total_chunks)
+    with c1:
+        st.metric("Queries", st.session_state.total_queries)
+    with c2:
+        st.metric("Chunks",  st.session_state.total_chunks)
 
     st.divider()
     st.markdown("**Evaluation (RAGAS)**")
