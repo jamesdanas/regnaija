@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 import warnings
 import sys
+import tempfile
 from collections import defaultdict
 from datetime import datetime, timezone, timedelta
 import streamlit as st
@@ -480,7 +481,6 @@ with st.sidebar:
     if uploaded and st.button("Ingest", type="primary", use_container_width=True):
         with st.spinner("Ingesting..."):
             try:
-                import tempfile
                 suffix = Path(uploaded.name).suffix
                 with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
                     tmp.write(uploaded.getvalue())
@@ -552,7 +552,7 @@ if not st.session_state.messages:
     """, unsafe_allow_html=True)
 
 # ── Chat history ──────────────────────────────────────────────────────────────
-for idx, msg in enumerate(st.session_state.messages):
+for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🏛️" if msg["role"] == "assistant" else None):
         st.markdown(msg["content"])
         if msg["role"] == "assistant" and msg.get("meta"):
@@ -586,7 +586,8 @@ if st.session_state.get("last_question"):
     question = st.session_state.last_question
     st.session_state.last_question = ""
 
-turn_key = f"{question}_{len(st.session_state.messages)}" if question else ""
+question  = question.strip() if question else ""
+turn_key  = f"{question}_{len(st.session_state.messages)}" if question else ""
 
 if question and turn_key != st.session_state.get("last_processed", ""):
     st.session_state.last_processed = turn_key
@@ -596,7 +597,8 @@ if question and turn_key != st.session_state.get("last_processed", ""):
     meta   = None
     error  = None
 
-    with st.status("Searching regulations...", expanded=False) as status:
+    _status_label = "Thinking..." if is_casual(question) else "Searching regulations..."
+    with st.status(_status_label, expanded=False) as status:
         try:
             if is_casual(question):
                 _is_first = sum(1 for m in st.session_state.messages if m["role"] == "assistant") == 0
@@ -618,11 +620,19 @@ if question and turn_key != st.session_state.get("last_processed", ""):
                 st.session_state.total_chunks  += meta["chunks"]
             status.update(label="Done", state="complete")
         except Exception as e:
-            error = str(e)
+            err_str = str(e)
+            if "429" in err_str or "rate_limit" in err_str.lower():
+                error = "Rate limit reached — please wait a moment and try again."
+            elif "connect" in err_str.lower() or "timeout" in err_str.lower():
+                error = "Connection error — check your internet and try again."
+            else:
+                error = err_str
             status.update(label="Error", state="error")
 
     if error:
         answer = f"Something went wrong: {error}"
+    if not answer.strip():
+        answer = "I couldn't find a relevant answer. Please try rephrasing your question."
 
     with st.chat_message("assistant", avatar="🏛️"):
         displayed = st.write_stream(stream_answer(answer))
