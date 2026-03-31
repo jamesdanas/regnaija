@@ -3,14 +3,14 @@ src/ingestion/metadata_extractor.py
 
 WHY THIS EXISTS:
 Zero-hallucination citations require structured metadata on every chunk:
-  - Which agency published this? (CBN, SEC, FIRS, NDPC, NITDA)
+  - Which agency published this? (CBN, SEC, NRS, NDPC, NITDA)
   - What is the document name?
   - When was it published?
   - What section number does this chunk come from?
   - What is the source URL for the audit trail?
 
 This extractor pulls all of that from the filename, folder name,
-and document text itself — so every answer NaijaCodex gives
+and document text itself - so every answer NaijaCodex gives
 can be traced back to a specific section of a specific document.
 """
 
@@ -35,8 +35,7 @@ class DocumentMetadata:
     doc_id: str
 
 
-# Known document registry — maps filenames to clean metadata
-# Add to this as you download more documents
+# Known document registry - maps filenames to clean metadata
 KNOWN_DOCUMENTS = {
     # CBN
     "cbn_cybersecurity_framework": {
@@ -75,7 +74,7 @@ KNOWN_DOCUMENTS = {
         "type": "framework",
         "url": "https://ndpc.gov.ng/media/NDPC_ImplementationFramework.pdf"
     },
-    # FIRS
+    # NRS
     "nigeria_tax_act_2025": {
         "name": "Nigeria Tax Act 2025",
         "short": "NTA 2025",
@@ -101,7 +100,7 @@ KNOWN_DOCUMENTS = {
     },
 }
 
-# Maps folder names to agency names
+# Map folder names to agency names
 AGENCY_MAP = {
     "CBN": "CBN",
     "SEC_Nigeria": "SEC",

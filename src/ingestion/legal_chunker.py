@@ -2,7 +2,7 @@
 src/ingestion/legal_chunker.py
 
 WHY THIS EXISTS:
-Normal chunkers split at character count — they will cut a sentence like:
+Normal chunkers split at character count - they will cut a sentence like:
 "The penalty for late filing shall be..." mid-clause, destroying its meaning.
 
 Nigerian legal documents have a very specific structure:
@@ -14,7 +14,7 @@ Nigerian legal documents have a very specific structure:
   "Notwithstanding..."
 
 This chunker detects those boundaries and NEVER splits mid-clause.
-Every chunk keeps its section number intact — which is what makes
+Every chunk keeps its section number intact - which is what makes
 zero-hallucination citations possible.
 """
 
@@ -50,7 +50,7 @@ class NigerianLegalChunker:
 
     # Regex patterns for Nigerian legal document structure
     SECTION_PATTERNS = [
-        r'^(PART\s+[IVXLCDM]+[\.\s])',           # PART I, PART II
+        r'^(PART\s+[IVXLCDM]+[\.\s])',             # PART I, PART II
         r'^(PART\s+\d+[\.\s])',                    # PART 1, PART 2
         r'^(Chapter\s+\d+[\.\s])',                 # Chapter 1
         r'^(Section\s+\d+[\.\d]*[\.\s])',          # Section 1, Section 1.1
@@ -61,7 +61,7 @@ class NigerianLegalChunker:
         r'^(Regulation\s+\d+[\.\s])',              # Regulation 1
     ]
 
-    # Legal transition phrases — never split after these
+    # Legal transition phrases - never split after these
     LEGAL_BRIDGES = [
         r'provided that',
         r'notwithstanding',
@@ -113,7 +113,7 @@ class NigerianLegalChunker:
             match = re.match(pattern, text.strip(), re.IGNORECASE)
             if match:
                 section_num = match.group(1).strip()
-                # Get title — first line after section number
+                # Get title - first line after section number
                 remaining = text[match.end():].strip()
                 title_line = remaining.split('\n')[0].strip()[:80]
                 return section_num, title_line
@@ -152,7 +152,7 @@ class NigerianLegalChunker:
             else:
                 current_section_lines.append(line)
 
-        # Don't forget the last section
+        # Do not forget the last section
         if current_section_lines:
             section_text = '\n'.join(current_section_lines).strip()
             if len(section_text) >= self.min_chunk_size:
@@ -165,8 +165,8 @@ class NigerianLegalChunker:
 
     def _split_large_section(self, section_text: str) -> List[str]:
         """
-        Splits a section that's too large into smaller pieces.
-        Respects sub-clause boundaries — never splits mid-sentence
+        Splits a section that is too large into smaller pieces.
+        Respects sub-clause boundaries - never splits mid-sentence
         if that sentence contains a legal bridge phrase.
         """
         if len(section_text) <= self.max_chunk_size:
@@ -186,7 +186,7 @@ class NigerianLegalChunker:
                 current_chunk += part
             else:
                 if current_chunk.strip():
-                    # Don't break if ends with a legal bridge phrase
+                    # Do not break if ends with a legal bridge phrase
                     ends_with_bridge = self.bridge_regex.search(
                         current_chunk[-200:]
                     )
