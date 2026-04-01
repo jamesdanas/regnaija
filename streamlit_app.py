@@ -25,14 +25,14 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── WAT time computed once per request, never inside a cached function ────────
-_WAT      = timezone(timedelta(hours=1))
-_NOW_WAT  = datetime.now(_WAT)
+# WAT time computed once per request, never inside a cached function
+_WAT = timezone(timedelta(hours=1))
+_NOW_WAT = datetime.now(_WAT)
 _HOUR_WAT = _NOW_WAT.hour
 _TIME_STR = _NOW_WAT.strftime("%I:%M %p WAT, %A %d %B %Y")
-_PERIOD   = "morning" if _HOUR_WAT < 12 else ("afternoon" if _HOUR_WAT < 17 else "evening")
+_PERIOD = "morning" if _HOUR_WAT < 12 else ("afternoon" if _HOUR_WAT < 17 else "evening")
 
-# ── Persistence ───────────────────────────────────────────────────────────────
+# ------- Persistence --------
 SESSIONS_FILE = Path("naijacodex_sessions.json")
 
 def load_sessions():
@@ -52,7 +52,7 @@ def save_sessions(sessions_list):
     except Exception:
         pass
 
-# ── CSS ───────────────────────────────────────────────────────────────────────
+# ------ CSS -------
 st.markdown("""
 <style>
     :root {
@@ -220,7 +220,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── Session state ─────────────────────────────────────────────────────────────
+# ------- Session state ---------
+
 for k, v in {
     "messages": [],
     "sessions": load_sessions(),
@@ -234,7 +235,7 @@ for k, v in {
     if k not in st.session_state:
         st.session_state[k] = v
 
-# ── Pipeline ──────────────────────────────────────────────────────────────────
+# ------- Pipeline -------
 @st.cache_resource(show_spinner=False)
 def load_pipeline():
     from src.graph.rag_graph import NaijaCodexPipeline
@@ -247,7 +248,7 @@ if not st.session_state.pipeline_ready:
 else:
     pipeline = load_pipeline()
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# ------- Helpers --------
 _REGULATORY_KEYWORDS = {
     "cbn","sec","ndpc","nrs","nitda","cyber","penalty","compliance","regulation",
     "bank","tax","fintech","data protection","capital","securities","law","act",
@@ -276,9 +277,7 @@ def is_casual(text: str) -> bool:
             break
     return not any(kw in t_stripped for kw in _REGULATORY_KEYWORDS)
 
-# FIX: time_str + period passed as params (computed outside cache)
-# FIX: is_first bool not turn_count int — cleaner cache key
-# FIX: ttl=300 so time stays fresh (re-caches every 5 min)
+# time_str + period passed as params (computed outside cache)
 @st.cache_data(show_spinner=False, ttl=300)
 def casual_response(question: str, time_str: str, period: str, is_first: bool) -> str:
     from langchain_groq import ChatGroq
@@ -313,7 +312,7 @@ def casual_response(question: str, time_str: str, period: str, is_first: bool) -
         HumanMessage(content=question),
     ]).content.strip()
 
-# FIX: cap total stream time at 2s max — long answers don't crawl
+# Cap total stream time at 2s max — long answers don't crawl
 def stream_answer(text: str):
     words = text.split(" ")
     delay = min(0.018, 2.0 / max(len(words), 1))
@@ -346,9 +345,9 @@ def format_citations_markdown(raw_cit: str) -> str:
     for line in lines:
         m = re.search(r'https?://\S+', line)
         if m:
-            url  = m.group(0).rstrip(".,)")
+            url = m.group(0).rstrip(".,)")
             desc = line[:m.start()].strip(" ·•-[]()").strip()
-            sec  = re.search(r'Section\s+[\d\.]+', desc, re.IGNORECASE)
+            sec = re.search(r'Section\s+[\d\.]+', desc, re.IGNORECASE)
             url_to_items[url].append(sec.group() if sec else (desc[:50] if desc else url))
         else:
             url_to_items[None].append(line)
@@ -360,7 +359,7 @@ def format_citations_markdown(raw_cit: str) -> str:
         elif len(items) == 1:
             md.append(f"- [{items[0]}]({url})")
         else:
-            doc  = items[0].split(" Section")[0].strip()
+            doc = items[0].split(" Section")[0].strip()
             secs = [re.search(r'Section\s+([\d\.]+)', it, re.IGNORECASE) for it in items]
             nums = [s.group(1) for s in secs if s]
             label = f"{doc} — Sections {', '.join(nums)}" if nums else "; ".join(items)
@@ -400,12 +399,12 @@ def render_message_meta(meta: dict):
         sources_md = format_citations_markdown(raw_cit)
         with st.expander("Sources", expanded=False):
             st.markdown(sources_md)
-    conf     = meta.get("confidence", "MED")
+    conf = meta.get("confidence", "MED")
     agencies = ", ".join(meta.get("agencies_searched", [])) or "N/A"
-    chunks   = meta.get("chunks", 0)
-    latency  = meta.get("latency_ms", 0)
+    chunks = meta.get("chunks", 0)
+    latency = meta.get("latency_ms", 0)
     conflict = " · <span style='color:#f87171;'>Conflict</span>" if meta.get("conflict") else ""
-    badge    = confidence_badge(conf)
+    badge = confidence_badge(conf)
     st.markdown(
         f"<div class='metadata-line'>"
         f"{agencies} · {chunks} chunks · {badge} · {latency}ms{conflict}"
@@ -413,7 +412,7 @@ def render_message_meta(meta: dict):
         unsafe_allow_html=True,
     )
 
-# ── SIDEBAR ───────────────────────────────────────────────────────────────────
+# ------ SIDEBAR -------
 with st.sidebar:
     st.markdown("""
     <div style='text-align:center;padding:8px 0;'>
@@ -496,10 +495,10 @@ with st.sidebar:
     st.divider()
     st.markdown("**Regulatory Bodies**")
     for short, url in [
-        ("CBN",   "https://www.cbn.gov.ng"),
-        ("SEC",   "https://home.sec.gov.ng"),
-        ("NDPC",  "https://ndpc.gov.ng"),
-        ("NRS",   "https://nrs.gov.ng"),
+        ("CBN", "https://www.cbn.gov.ng"),
+        ("SEC", "https://home.sec.gov.ng"),
+        ("NDPC", "https://ndpc.gov.ng"),
+        ("NRS", "https://nrs.gov.ng"),
         ("NITDA", "https://nitda.gov.ng"),
     ]:
         st.markdown(
@@ -537,7 +536,7 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-# ── MAIN ──────────────────────────────────────────────────────────────────────
+# ------ MAIN --------
 st.markdown("""
 <h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>NaijaCodex</h1>
 <p style='text-align:center;color:#555;font-size:12px;'>CBN · SEC · NDPC · NRS · NITDA</p>
@@ -551,14 +550,14 @@ if not st.session_state.messages:
     </div>
     """, unsafe_allow_html=True)
 
-# ── Chat history ──────────────────────────────────────────────────────────────
+# ------ Chat history --------
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="🏛️" if msg["role"] == "assistant" else None):
         st.markdown(msg["content"])
         if msg["role"] == "assistant" and msg.get("meta"):
             render_message_meta(msg["meta"])
 
-# ── Follow-up suggestions ─────────────────────────────────────────────────────
+# ----- Follow-up suggestions -------
 _msgs = st.session_state.messages
 if _msgs and _msgs[-1]["role"] == "assistant" and _msgs[-1].get("meta"):
     _cache_key = f"followups_{len(_msgs)}"
@@ -579,23 +578,23 @@ if _msgs and _msgs[-1]["role"] == "assistant" and _msgs[-1].get("meta"):
                     st.session_state.last_question = _sug
                     st.rerun()
 
-# ── Chat input ────────────────────────────────────────────────────────────────
+# ------- Chat input ---------
 question = st.chat_input("Ask about Nigerian regulations...")
 
 if st.session_state.get("last_question"):
     question = st.session_state.last_question
     st.session_state.last_question = ""
 
-question  = question.strip() if question else ""
-turn_key  = f"{question}_{len(st.session_state.messages)}" if question else ""
+question = question.strip() if question else ""
+turn_key = f"{question}_{len(st.session_state.messages)}" if question else ""
 
 if question and turn_key != st.session_state.get("last_processed", ""):
     st.session_state.last_processed = turn_key
     st.session_state.messages.append({"role": "user", "content": question, "meta": None})
 
     answer = ""
-    meta   = None
-    error  = None
+    meta = None
+    error = None
 
     _status_label = "Thinking..." if is_casual(question) else "Searching regulations..."
     with st.status(_status_label, expanded=False) as status:
@@ -603,18 +602,18 @@ if question and turn_key != st.session_state.get("last_processed", ""):
             if is_casual(question):
                 _is_first = sum(1 for m in st.session_state.messages if m["role"] == "assistant") == 0
                 answer = casual_response(question, _TIME_STR, _PERIOD, _is_first)
-                meta   = None
+                meta = None
             else:
                 result = pipeline.query(question)
                 answer = clean_answer(result.get("answer", ""))
-                meta   = {
-                    "citations":         result.get("citations", ""),
-                    "confidence":        result.get("confidence", "MED"),
+                meta = {
+                    "citations": result.get("citations", ""),
+                    "confidence": result.get("confidence", "MED"),
                     "agencies_searched": result.get("agencies_searched", []),
-                    "chunks":            len(result.get("retrieved_docs", [])),
-                    "query_id":          result.get("query_id", ""),
-                    "latency_ms":        result.get("latency_ms", 0),
-                    "conflict":          result.get("conflicts_found", False),
+                    "chunks": len(result.get("retrieved_docs", [])),
+                    "query_id": result.get("query_id", ""),
+                    "latency_ms": result.get("latency_ms", 0),
+                    "conflict": result.get("conflicts_found", False),
                 }
                 st.session_state.total_queries += 1
                 st.session_state.total_chunks  += meta["chunks"]
@@ -646,15 +645,15 @@ if question and turn_key != st.session_state.get("last_processed", ""):
     title = question[:45] + ("..." if len(question) > 45 else "")
     if st.session_state.current_index == -1:
         st.session_state.sessions.append({
-            "id":       str(len(st.session_state.sessions) + 1),
-            "title":    title,
+            "id": str(len(st.session_state.sessions) + 1),
+            "title": title,
             "messages": st.session_state.messages[:],
         })
         st.session_state.current_index = len(st.session_state.sessions) - 1
     else:
         i = st.session_state.current_index
         st.session_state.sessions[i]["messages"] = st.session_state.messages[:]
-        st.session_state.sessions[i]["title"]    = title
+        st.session_state.sessions[i]["title"] = title
     save_sessions(st.session_state.sessions)
 
     st.rerun()

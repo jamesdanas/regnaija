@@ -1,0 +1,106 @@
+{
+  "ingestion_timestamp": "2026-03-06T18:18:38.427382",
+  "total_documents": 6,
+  "total_chunks": 967,
+  "agencies": [
+    {
+      "agency": "CBN",
+      "documents": 3,
+      "chunks": 439,
+      "log": [
+        {
+          "filename": "cbn_cybersecurity_framework.pdf",
+          "document_name": "CBN Cybersecurity Framework for Nigerian Banking Sector",
+          "agency": "CBN",
+          "doc_id": "CBN-CBN-CYBERSECURITY-FRAMEWORK-2021",
+          "publication_date": "2021-01-01",
+          "chunks": 130,
+          "was_ocr": false,
+          "quality_score": 0.87,
+          "ingested_at": "2026-03-06T18:18:05.133305"
+        },
+        {
+          "filename": "cbn_open_banking_policy.pdf",
+          "document_name": "CBN Open Banking Policy for Nigeria",
+          "agency": "CBN",
+          "doc_id": "CBN-CBN-OPEN-BANKING-POLICY-2023",
+          "publication_date": "2023-01-01",
+          "chunks": 181,
+          "was_ocr": false,
+          "quality_score": 0.87,
+          "ingested_at": "2026-03-06T18:18:12.894224"
+        },
+        {
+          "filename": "cbn_consumer_protection.pdf",
+          "document_name": "CBN Consumer Protection Framework",
+          "agency": "CBN",
+          "doc_id": "CBN-CBN-CONSUMER-PROTECTION-2016",
+          "publication_date": "2016-01-01",
+          "chunks": 128,
+          "was_ocr": false,
+          "quality_score": 0.85,
+          "ingested_at": "2026-03-06T18:18:15.208814"
+        }
+      ]
+    },
+    {
+      "agency": "SEC",
+      "documents": 1,
+      "chunks": 382,
+      "log": [
+        {
+          "filename": "investments_securities_act.pdf",
+          "document_name": "Investments and Securities Act 2007",
+          "agency": "SEC",
+          "doc_id": "SEC-ISA-2007-2007",
+          "publication_date": "2007-01-01",
+          "chunks": 382,
+          "was_ocr": false,
+          "quality_score": 0.9,
+          "ingested_at": "2026-03-06T18:18:28.075380"
+        }
+      ]
+    },
+    {
+      "agency": "FIRS",
+      "documents": 0,
+      "chunks": 0
+    },
+    {
+      "agency": "NDPC",
+      "documents": 1,
+      "chunks": 123,
+      "log": [
+        {
+          "filename": "ndpa_2023.pdf",
+          "document_name": "Nigeria Data Protection Act 2023",
+          "agency": "NDPC",
+          "doc_id": "NDPC-NDPA-2023-2023",
+          "publication_date": "2023-06-14",
+          "chunks": 123,
+          "was_ocr": false,
+          "quality_score": 0.88,
+          "ingested_at": "2026-03-06T18:18:36.102699"
+        }
+      ]
+    },
+    {
+      "agency": "NITDA",
+      "documents": 1,
+      "chunks": 23,
+      "log": [
+        {
+          "filename": "ndpr_2019.pdf",
+          "document_name": "Nigeria Data Protection Regulation 2019",
+          "agency": "NITDA",
+          "doc_id": "NITDA-NDPR-2019-2019",
+          "publication_date": "2019-01-25",
+          "chunks": 23,
+          "was_ocr": false,
+          "quality_score": 0.91,
+          "ingested_at": "2026-03-06T18:18:38.427103"
+        }
+      ]
+    }
+  ]
+}

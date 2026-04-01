@@ -1,0 +1,81 @@
+NIGERIA DATA PROTECTION ACT 2023
+Federal Republic of Nigeria
+Signed into Law: June 14, 2023
+
+PART I — ESTABLISHMENT AND OBJECTIVES
+
+Section 1. Establishment of the Nigeria Data Protection Commission
+1.1 There is established the Nigeria Data Protection Commission (the Commission).
+1.2 The Commission shall be a body corporate with perpetual succession and
+a common seal, and may sue and be sued in its corporate name.
+
+Section 2. Objectives of the Act
+The objectives of this Act are to:
+(a) regulate the processing of personal data of data subjects in Nigeria;
+(b) ensure that the right to privacy of natural persons is protected;
+(c) foster safe conduct for transactions involving the exchange of personal data;
+(d) prevent manipulation of personal data.
+
+PART II — DATA PROTECTION PRINCIPLES
+
+Section 3. Lawful Processing of Personal Data
+3.1 Personal data shall be processed only if at least one of the following
+conditions is met:
+(a) the data subject has given consent to the processing;
+(b) processing is necessary for the performance of a contract;
+(c) processing is necessary for compliance with a legal obligation;
+(d) processing is necessary to protect vital interests of the data subject.
+
+Section 4. Rights of Data Subjects
+4.1 Every data subject has the right to:
+(a) be informed of the processing of their personal data;
+(b) access their personal data held by a data controller;
+(c) request rectification of inaccurate personal data;
+(d) request erasure of personal data where processing is unlawful;
+(e) object to processing of their personal data.
+
+Section 5. Data Retention
+5.1 Personal data shall not be retained longer than is necessary for the
+purpose for which it was collected.
+5.2 Notwithstanding subsection 5.1, data may be retained longer where
+required by any applicable law or regulation.
+5.3 A data controller that retains personal data beyond the permitted
+period is liable to a fine of not less than N2,000,000.
+
+PART III — OBLIGATIONS OF DATA CONTROLLERS
+
+Section 6. Registration Requirements
+6.1 Every data controller of major importance shall register with the Commission.
+6.2 A data controller that processes the personal data of more than 2,000
+data subjects within a 12-month period shall be deemed of major importance.
+6.3 Registration shall be renewed annually and failure to renew attracts
+a penalty of N2,000,000 per month of default.
+
+Section 7. Data Protection Officer
+7.1 Every data controller of major importance shall designate a Data
+Protection Officer (DPO).
+7.2 The DPO shall be responsible for ensuring compliance with this Act
+and shall report directly to the highest level of management.
+7.3 The DPO shall be accessible to data subjects at all times.
+
+Section 8. Penalties for Non-Compliance
+8.1 A data controller that fails to comply with this Act is liable to:
+(a) in the case of an individual, a fine of not less than N2,000,000;
+(b) in the case of a company, a fine of 2% of annual gross revenue
+    or N10,000,000, whichever is greater.
+8.2 Repeated violations may attract a fine of up to 10% of annual
+gross revenue.
+8.3 The Commission may in addition to fines, order the suspension
+of data processing activities.
+
+PART IV — CROSS-BORDER DATA TRANSFERS
+
+Section 9. Transfer of Personal Data Outside Nigeria
+9.1 A data controller shall not transfer personal data to a foreign
+country unless that country provides an adequate level of protection.
+9.2 Adequacy shall be determined by the Commission based on:
+(a) the rule of law and human rights record of the receiving country;
+(b) the existence of a supervisory authority in that country;
+(c) international commitments entered into by that country.
+9.3 Where adequacy cannot be established, transfer may proceed only
+with the explicit consent of the data subject.

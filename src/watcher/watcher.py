@@ -216,7 +216,7 @@ class DocumentIngester:
             )
 
             if len(text.strip()) < 100:
-                log.warning(f"  Too little text extracted — skipping")
+                log.warning("Too little text extracted - skipping")
                 return False
 
             # Chunk it

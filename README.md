@@ -65,50 +65,50 @@ Evaluated against a 10-question golden test set covering all 5 agencies. Judge: 
 
 ---
 
-## Architecture
+## System Architecture
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        User Query                                │
+│                        User Query                               │
 └──────────────────────────┬──────────────────────────────────────┘
                            │
-                           ▼
+                           v
 ┌─────────────────────────────────────────────────────────────────┐
-│                  Streamlit UI  (streamlit_app.py)                │
-│   Chat interface · Session history · Source citations            │
-│   Casual conversation bypass · Confidence display                │
+│                  Streamlit UI  (streamlit_app.py)               │
+│   Chat interface · Session history · Source citations           │
+│   Casual conversation bypass · Confidence display               │
 └──────────────────────────┬──────────────────────────────────────┘
                            │
               ┌────────────┴────────────┐
               │                         │
-              ▼                         ▼
-   Casual message?              Regulatory query?
-   (greetings, small talk)      (CBN, SEC, NDPC...)
+              V                         V
+     Casual message?              Regulatory query?
+     (greetings, small talk)      (CBN, SEC, NDPC...)
               │                         │
-              ▼                         ▼
-   Direct LLM reply           LangGraph Agentic Pipeline
-   (no Pinecone)                        │
+              V                         V
+     Direct LLM reply           LangGraph Agentic Pipeline
+     (no Pinecone)                      │
                                ┌────────┴─────────┐
-                               ▼                   ▼
+                               V                  V 
                         Query Analyser      Agency Detector
                                │
-                               ▼
+                               V
                         Retrieval Agent
                         (Pinecone · top_k=8)
                         (BAAI/bge-small-en-v1.5)
                                │
-                               ▼
+                               V
                         Conflict Detector
                         (cross-agency checks)
                                │
-                               ▼
+                               V
                         Confidence Guard
                         (blocks low-confidence)
                                │
-                               ▼
+                               V
                         Answer Synthesiser
                         (Groq · llama-3.3-70b)
                                │
-                               ▼
+                               V
                     ┌──────────────────────┐
                     │  Cited Answer        │
                     │  + Source Documents  │
@@ -141,8 +141,6 @@ Runtime             Python 3.11 · CPU-only · Ubuntu 24
 ```
 naijacodex/
 ├── streamlit_app.py                # Streamlit UI — main entry point
-├── eval_generate.py                # RAGAS Phase 1 — generate & cache answers
-├── eval_score.py                   # RAGAS Phase 2 — score cached answers
 ├── eval_cache.json                 # Cached pipeline answers (10 questions)
 ├── ragas_results.json              # Full per-question scores
 ├── ragas_summary.txt               # Human-readable eval summary
@@ -168,6 +166,8 @@ naijacodex/
 │   ├── documents/CBN/              # CBN source PDFs
 │   └── watcher_registry.json       # Ingestion history
 └── tests/
+    ├── eval_generate.py                # RAGAS Phase 1 — generate & cache answers
+    └── eval_score.py                   # RAGAS Phase 2 — score cached answers
 ```
 
 ---
@@ -217,7 +217,7 @@ Open `http://localhost:8501` in your browser.
 Every answer is grounded in retrieved document chunks. If sufficient sources are not found, the system returns a transparent "I don't know" with recommended actions — never a fabricated answer.
 
 ### Multi-Agency Query Routing
-The query analyser automatically detects which regulatory agencies are relevant and routes retrieval accordingly — CBN for banking, NDPC for data protection, SEC for capital markets.
+The query analyser automatically detects which regulatory agencies are relevant and routes retrieval accordingly — CBN for banking, NDPC for data protection, SEC for capital markets, etc.
 
 ### Conflict Detection
 When multiple agencies have overlapping or contradictory rules, NaijaCodex flags the conflict explicitly so the user is aware of the regulatory tension.

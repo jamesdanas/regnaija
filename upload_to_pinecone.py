@@ -16,7 +16,7 @@ with open('data/processed/chunks_ready.json', 'r') as f:
 print(f"Found {len(chunks)} chunks to upload")
 
 embedder = NaijaCodexEmbedder()
-store    = NaijaCodexVectorStore(embedder=embedder)
+store = NaijaCodexVectorStore(embedder=embedder)
 
 docs = [
     Document(page_content=c['text'], metadata=c['metadata'])
@@ -24,7 +24,7 @@ docs = [
 ]
 
 upserted = store.upsert_chunks(docs)
-stats    = store.get_index_stats()
+stats = store.get_index_stats()
 
 print(f"Uploaded {upserted} chunks to Pinecone")
 print(f"Pinecone total vectors: {stats['total_vectors']}")

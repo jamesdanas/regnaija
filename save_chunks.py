@@ -12,7 +12,7 @@ from src.ingestion.metadata_extractor import MetadataExtractor
 
 def generate_full_library_cache():
     print("=" * 50)
-    print("NAIJACODEX — FULL LIBRARY CACHE GENERATOR")
+    print("NAIJACODEX - FULL LIBRARY CACHE GENERATOR")
     print("=" * 50)
     
     ocr = OCRProcessor()
@@ -91,10 +91,10 @@ def generate_full_library_cache():
         json.dump(all_processed_chunks, f, indent=4)
         
     print("\n" + "=" * 50)
-    print(f"SUCCESS: Full Library Cached!")
+    print("SUCCESS: Full Library Cached!")
     print(f"Destination: {output_path}")
     print(f"Total Documents: {total_docs}")
-    print(f"Total Chunks:    {len(all_processed_chunks)}")
+    print(f"Total Chunks: {len(all_processed_chunks)}")
     print("=" * 50)
 
 if __name__ == "__main__":

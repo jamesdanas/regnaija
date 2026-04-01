@@ -50,18 +50,18 @@ def make_llm():
 
 METRIC_CLASSES = {
     "context_precision": lambda: ContextPrecision(llm=make_llm()),
-    "context_recall":    lambda: ContextRecall(llm=make_llm()),
+    "context_recall": lambda: ContextRecall(llm=make_llm()),
 }
 
 est = len(good) * len(METRIC_NAMES) * (DELAY_BETWEEN + 25) // 60 + 1
-print(f"Judge: llama-3.1-8b-instant")
+print("Judge: llama-3.1-8b-instant")
 print(f"Scoring {len(good)} questions x {len(METRIC_NAMES)} metrics sequentially")
 print(f"Estimated time: ~{est} minutes\n")
 
 results = {r["question"]: {} for r in good}
 
 for metric_name, metric_factory in METRIC_CLASSES.items():
-    print(f"\n── Metric: {metric_name} ──────────────────────────────────")
+    print(f"\n-------- Metric: {metric_name} ----------------------")
     for i, rec in enumerate(good):
         q = rec["question"]
         print(f"  [{i+1:02d}/{len(good)}] {q[:60]}...", end=" ", flush=True)
@@ -73,9 +73,9 @@ for metric_name, metric_factory in METRIC_CLASSES.items():
         score   = float("nan")
         for attempt in range(1, 4):
             try:
-                row   = evaluate(dataset=dataset, metrics=[metric_factory()],
+                row = evaluate(dataset=dataset, metrics=[metric_factory()],
                                  raise_exceptions=False).to_pandas().iloc[0]
-                val   = row.get(metric_name)
+                val = row.get(metric_name)
                 score = round(float(val), 4) if (
                     val is not None and not (isinstance(val, float) and math.isnan(val))
                 ) else float("nan")
@@ -84,7 +84,7 @@ for metric_name, metric_factory in METRIC_CLASSES.items():
             except RuntimeError:
                 pass
             except KeyboardInterrupt:
-                print("\nInterrupted — saving partial results...")
+                print("\nInterrupted - saving partial results...")
                 _ts = datetime.now().strftime("%Y%m%d_%H%M%S")
                 Path("eval_partial.json").write_text(
                     json.dumps({"run_at": _ts, "partial": True,

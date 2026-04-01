@@ -1,0 +1,89 @@
+NIGERIA TAX ACT 2025 (NTA)
+Nigeria Revenue Service (NRS)
+Signed into Law: June 26, 2025
+Effective Date: January 1, 2026
+
+PART I — IMPOSITION OF TAX
+
+Section 1. Charge of Tax
+1.1 Tax is hereby imposed on income, transactions and instruments
+as provided in this Act.
+1.2 This Act repeals and consolidates the following legislation:
+(a) Companies Income Tax Act (CITA);
+(b) Personal Income Tax Act (PITA);
+(c) Petroleum Profits Tax Act (PPTA);
+(d) Value Added Tax Act (VAT);
+(e) Capital Gains Tax Act (CGTA);
+(f) Stamp Duties Act (SDA).
+
+Section 2. Classification of Companies
+2.1 For the purposes of this Act, companies are classified as:
+(a) Small companies — annual gross turnover of N50,000,000 or less
+    with total fixed assets not exceeding N250,000,000;
+(b) Large companies — all other companies not qualifying as small.
+2.2 Provided that any business providing professional services shall
+not be classified as a small company regardless of turnover.
+
+Section 3. Rate of Tax
+3.1 Small companies shall be exempt from Companies Income Tax at a
+rate of 0% on their assessable profits.
+3.2 Large companies shall be taxed at a flat rate of 30% of
+assessable profits.
+3.3 The previous three-tier tax structure under the repealed CITA
+is hereby abolished with effect from January 1, 2026.
+
+Section 4. Development Levy
+4.1 A Development Levy of 4% on assessable profits shall apply to
+all companies except small companies.
+4.2 This levy consolidates and replaces the following:
+(a) Tertiary Education Tax of 3%;
+(b) NITDA Levy of 1%;
+(c) NASENI Levy of 0.25%;
+(d) Police Trust Fund Levy of 0.005%.
+
+Section 5. Capital Gains Tax
+5.1 The Capital Gains Tax rate for companies is hereby increased
+from 10% to 30%, aligning with the Companies Income Tax rate.
+5.2 CGT now applies to disposals of digital and virtual assets
+including cryptocurrencies and NFTs.
+5.3 Provided that primary residence disposals remain exempt from CGT.
+
+Section 6. Digital and Virtual Assets
+6.1 Banks and Virtual Asset Service Providers must report transactions
+exceeding N25,000,000 for individuals and N100,000,000 for companies.
+6.2 All Virtual Asset Service Providers must register with the NRS
+within 90 days of commencement of this Act.
+6.3 Withholding tax deducted shall be remitted to the NRS within
+30 days of deduction.
+6.4 Failure to remit attracts a penalty of 10% of the unremitted
+amount plus interest at the prevailing CBN benchmark lending rate.
+
+PART II — FILING AND COMPLIANCE
+
+Section 7. Filing Requirements
+7.1 Every company shall file its self-assessment tax return not later
+than six months after the end of its accounting year.
+7.2 Failure to file within the stipulated period shall attract a
+penalty of N25,000 for the first month of default and N5,000 for
+each subsequent month.
+7.3 The NRS may extend filing deadlines in cases of natural disaster
+or other exceptional circumstances upon written application.
+
+Section 8. Enforcement Powers of the NRS
+8.1 The NRS is empowered to inspect business premises and appoint
+third-party collection agents for unpaid taxes.
+8.2 The NRS may seize assets where taxes remain unpaid after
+a final demand notice of 30 days.
+8.3 Taxpayers retain rights to advance rulings on transactions
+and may apply for negotiated settlements.
+
+PART III — MULTINATIONAL COMPANIES
+
+Section 9. Minimum Effective Tax Rate
+9.1 Multinational corporations with global revenues of EUR 750 million
+or Nigerian annual turnover above N50 billion must pay a minimum
+15% effective tax rate on net income earned in Nigeria.
+9.2 Where the effective tax rate paid falls below 15%, a top-up
+tax shall be assessed and collected by the NRS.
+9.3 This provision aligns Nigeria with the OECD Pillar Two framework
+on global minimum taxation.

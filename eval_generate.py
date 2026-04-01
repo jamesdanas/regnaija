@@ -45,16 +45,19 @@ for i, item in enumerate(GOLDEN_SET, 1):
     print(f"[{i:02d}/{len(GOLDEN_SET)}] {q[:70]}")
     t0 = time.time()
     try:
-        result  = pipeline.query(q)
+        result = pipeline.query(q)
         latency = int((time.time() - t0) * 1000)
         answer = re.sub(r"\[SOURCE:[^\]]+\]", "", result.get("answer", "")).strip()
         docs = result.get("retrieved_docs", [])
         if docs:
             contexts = []
             for d in docs:
-                if hasattr(d, "page_content"): contexts.append(d.page_content)
-                elif isinstance(d, dict):        contexts.append(d.get("page_content", str(d)))
-                else:                            contexts.append(str(d))
+                if hasattr(d, "page_content"): 
+                    contexts.append(d.page_content)
+                elif isinstance(d, dict):        
+                    contexts.append(d.get("page_content", str(d)))
+                else:                            
+                    contexts.append(str(d))
         else:
             raw = result.get("citations", "")
             contexts = [raw] if raw else ["No context retrieved."]
@@ -78,7 +81,7 @@ print(f"\n{len(good)}/10 succeeded, {len(fails)}/10 failed")
 
 Path("eval_cache.json").write_text(
     json.dumps({"records": records}, indent=2, ensure_ascii=False), encoding="utf-8")
-print(f"Saved to eval_cache.json")
+print("Saved to eval_cache.json")
 
 if fails:
     print("\nFailed questions:")

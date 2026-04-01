@@ -75,7 +75,7 @@ def ingest_agency(
             processed = ocr.process(str(pdf_path))
 
             if processed.quality_score < 0.1:
-                print(f"Quality too low ({processed.quality_score}) — skipping")
+                print(f"Quality too low ({processed.quality_score}) - skipping")
                 continue
 
             # Step 2: Extract metadata
@@ -96,7 +96,7 @@ def ingest_agency(
             )
 
             if not chunks:
-                print(f"No chunks created — skipping")
+                print("No chunks created - skipping")
                 continue
 
             # Step 4: Convert to Documents with full metadata
@@ -110,7 +110,7 @@ def ingest_agency(
             # Step 5: Upsert to Pinecone
             if not dry_run:
                 upserted = vector_store.upsert_chunks(documents)
-                print(f"{upserted} chunks → Pinecone")
+                print(f"{upserted} chunks -> Pinecone")
             else:
                 print(f"DRY RUN: would upsert {len(documents)} chunks")
 
@@ -167,11 +167,11 @@ def main():
     args = parser.parse_args()
 
     print("=" * 50)
-    print("NAIJACODEX — DOCUMENT INGESTION PIPELINE")
+    print("NAIJACODEX - DOCUMENT INGESTION PIPELINE")
     print("=" * 50)
 
     if args.dry_run:
-        print("DRY RUN MODE — nothing will be written to Pinecone")
+        print("DRY RUN MODE - nothing will be written to Pinecone")
 
     # Initialise components
     print("\nInitialising components...")
