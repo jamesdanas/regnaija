@@ -10,3 +10,5 @@ eval_partial.json
 README.md.bak
 *.log
 .DS_Store
+data/
+results/
