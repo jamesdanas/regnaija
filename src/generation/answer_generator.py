@@ -1,6 +1,6 @@
 """
 src/generation/answer_generator.py
-Zero-hallucination answer engine for NaijaCodex.
+Zero-hallucination answer engine for RegNaija.
 """
 
 import os
@@ -13,18 +13,18 @@ from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_core.documents import Document
 
-from src.generation.system_prompt import NAIJACODEX_SYSTEM_PROMPT
+from src.generation.system_prompt import REGNAIJA_SYSTEM_PROMPT
 from src.generation.citation_builder import (
     build_citations, format_citations, format_context_for_llm
 )
-from src.retrieval.vector_store import NaijaCodexVectorStore
+from src.retrieval.vector_store import RegNaijaVectorStore
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
 @dataclass
-class NaijaCodexAnswer:
+class RegNaijaAnswer:
     query_id: str
     query: str
     answer: str
@@ -45,12 +45,12 @@ class AnswerGenerator:
     2. Format chunks as labelled context
     3. Call Groq LLM with system prompt + context + query
     4. Build structured citations
-    5. Return complete NaijaCodexAnswer
+    5. Return complete RegNaijaAnswer
     """
 
     ALL_AGENCIES = ["CBN", "SEC", "NDPC", "NRS", "NITDA"]
 
-    def __init__(self, vector_store: NaijaCodexVectorStore):
+    def __init__(self, vector_store: RegNaijaVectorStore):
         self.store = vector_store
         self.llm = ChatGroq(
             model = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
@@ -110,7 +110,7 @@ class AnswerGenerator:
         query: str,
         agencies: Optional[List[str]] = None,
         top_k: int = 6,
-    ) -> NaijaCodexAnswer:
+    ) -> RegNaijaAnswer:
         """
         Main method. Answers a regulatory compliance question.
         """
@@ -157,13 +157,13 @@ class AnswerGenerator:
             prompt = (
                 f"The following compliance question was asked but no "
                 f"relevant regulatory provisions were found in the "
-                f"NaijaCodex document library:\n\n"
+                f"RegNaija document library:\n\n"
                 f"QUESTION: {query}\n\n"
                 f"Inform the user clearly and suggest next steps."
             )
 
         messages = [
-            SystemMessage(content=NAIJACODEX_SYSTEM_PROMPT),
+            SystemMessage(content=REGNAIJA_SYSTEM_PROMPT),
             HumanMessage(content=prompt),
         ]
 
@@ -175,7 +175,7 @@ class AnswerGenerator:
             (datetime.now() - start_time).total_seconds() * 1000
         )
 
-        return NaijaCodexAnswer(
+        return RegNaijaAnswer(
             query_id = query_id,
             query = query,
             answer = answer,
@@ -188,10 +188,10 @@ class AnswerGenerator:
         )
 
 
-def print_answer(result: NaijaCodexAnswer):
-    """Pretty prints a NaijaCodexAnswer to terminal."""
+def print_answer(result: RegNaijaAnswer):
+    """Pretty prints a RegNaijaAnswer to terminal."""
     print("\n" + "=" * 60)
-    print(f"NAIJACODEX ANSWER [{result.query_id}]")
+    print(f"REGNAIJA ANSWER [{result.query_id}]")
     print("=" * 60)
     print(f"Query: {result.query}")
     print(f"Agencies searched: {', '.join(result.agencies_searched)}")

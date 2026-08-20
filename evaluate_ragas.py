@@ -1,5 +1,5 @@
 """
-evaluate_ragas.py — NaijaCodex RAGAS Evaluation 
+evaluate_ragas.py — RegNaija RAGAS Evaluation 
 Compatible: ragas==0.2.6 | langchain==0.3.0 | langchain-community==0.3.0
 Judge: Groq llama-3.3-70b
 
@@ -76,9 +76,9 @@ metrics = [
 print("Judge ready (ResponseRelevancy excluded — ragas 0.2.6 non-OpenAI limitation)\n")
 
 # Pipeline 
-print("Loading NaijaCodex pipeline...")
-from src.graph.rag_graph import NaijaCodexPipeline
-pipeline = NaijaCodexPipeline()
+print("Loading RegNaija pipeline...")
+from src.graph.rag_graph import RegNaijaPipeline
+pipeline = RegNaijaPipeline()
 print("Pipeline ready\n")
 
 # Run golden questions 
@@ -181,7 +181,7 @@ Path("ragas_flagged.json").write_text(
 W = 52
 header = f"{'#':<4} {'Question':<{W}} {'Faith':>6} {'Prec':>6} {'Rcll':>6} {'Avg':>6}"
 sep = "─" * len(header)
-lines = ["═"*len(header), "NaijaCodex — RAGAS Evaluation Results",
+lines = ["═"*len(header), "RegNaija — RAGAS Evaluation Results",
           f"{ts}  |  {len(full_results)} questions  |  {len(flagged)} flagged",
           "Metrics: Faithfulness · Context Precision · Context Recall",
           "(ResponseRelevancy excluded — ragas 0.2.6 + non-OpenAI embeddings returns 0.000)",

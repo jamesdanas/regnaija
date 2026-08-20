@@ -8,7 +8,7 @@ from typing import List, Optional, TypedDict
 from langchain_core.documents import Document
 
 
-class NaijaCodexState(TypedDict):
+class RegNaijaState(TypedDict):
     # Input
     query: str
     session_id: str

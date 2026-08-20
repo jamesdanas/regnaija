@@ -12,3 +12,6 @@ README.md.bak
 .DS_Store
 data/
 results/
+
+.env
+.streamlit/secrets.toml

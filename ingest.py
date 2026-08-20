@@ -1,7 +1,7 @@
 """
 ingest.py
 
-Master ingestion script for NaijaCodex.
+Master ingestion script for RegNaija.
 Run this to process all Nigerian regulatory documents
 and load them into Pinecone.
 
@@ -24,8 +24,8 @@ load_dotenv()
 from src.ingestion.ocr_processor import OCRProcessor
 from src.ingestion.legal_chunker import NigerianLegalChunker
 from src.ingestion.metadata_extractor import MetadataExtractor
-from src.retrieval.embedder import NaijaCodexEmbedder
-from src.retrieval.vector_store import NaijaCodexVectorStore
+from src.retrieval.embedder import RegNaijaEmbedder
+from src.retrieval.vector_store import RegNaijaVectorStore
 
 
 # Documents folder structure
@@ -46,7 +46,7 @@ def ingest_agency(
     ocr: OCRProcessor,
     chunker: NigerianLegalChunker,
     extractor: MetadataExtractor,
-    vector_store: NaijaCodexVectorStore,
+    vector_store: RegNaijaVectorStore,
     dry_run: bool = False,
 ) -> dict:
     """
@@ -161,13 +161,13 @@ def save_ingestion_report(results: list):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="NaijaCodex Document Ingestion")
+    parser = argparse.ArgumentParser(description="RegNaija Document Ingestion")
     parser.add_argument("--agency", help="Ingest only this agency (CBN, SEC, FIRS, NDPC, NITDA)")
     parser.add_argument("--dry-run", action="store_true", help="Test without writing to Pinecone")
     args = parser.parse_args()
 
     print("=" * 50)
-    print("NAIJACODEX - DOCUMENT INGESTION PIPELINE")
+    print("REGNAIJA - DOCUMENT INGESTION PIPELINE")
     print("=" * 50)
 
     if args.dry_run:
@@ -178,8 +178,8 @@ def main():
     ocr = OCRProcessor()
     chunker = NigerianLegalChunker()
     extractor = MetadataExtractor()
-    embedder = NaijaCodexEmbedder()
-    store = NaijaCodexVectorStore(embedder=embedder)
+    embedder = RegNaijaEmbedder()
+    store = RegNaijaVectorStore(embedder=embedder)
 
     # Determine which agencies to process
     if args.agency:
@@ -218,7 +218,7 @@ def main():
         print(f"Pinecone index: {stats['index_name']}")
         print(f"Total vectors: {stats['total_vectors']}")
 
-    print("\nNaijaCodex knowledge base ready")
+    print("\nRegNaija knowledge base ready")
 
 
 if __name__ == "__main__":

@@ -34,8 +34,8 @@ GOLDEN_SET = [
 ]
 
 print("Loading pipeline...")
-from src.graph.rag_graph import NaijaCodexPipeline
-pipeline = NaijaCodexPipeline()
+from src.graph.rag_graph import RegNaijaPipeline
+pipeline = RegNaijaPipeline()
 print("Pipeline ready\n")
 
 print(f"Running {len(GOLDEN_SET)} questions (2s gap to avoid rate limits)...\n")

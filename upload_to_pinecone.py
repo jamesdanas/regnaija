@@ -6,8 +6,8 @@ sys.path.insert(0, '.')
 from dotenv import load_dotenv
 load_dotenv()
 from langchain_core.documents import Document
-from src.retrieval.embedder import NaijaCodexEmbedder
-from src.retrieval.vector_store import NaijaCodexVectorStore
+from src.retrieval.embedder import RegNaijaEmbedder
+from src.retrieval.vector_store import RegNaijaVectorStore
 
 print("Loading pre-processed chunks...")
 with open('data/processed/chunks_ready.json', 'r') as f:
@@ -15,8 +15,8 @@ with open('data/processed/chunks_ready.json', 'r') as f:
 
 print(f"Found {len(chunks)} chunks to upload")
 
-embedder = NaijaCodexEmbedder()
-store = NaijaCodexVectorStore(embedder=embedder)
+embedder = RegNaijaEmbedder()
+store = RegNaijaVectorStore(embedder=embedder)
 
 docs = [
     Document(page_content=c['text'], metadata=c['metadata'])

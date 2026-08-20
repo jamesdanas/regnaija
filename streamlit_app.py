@@ -1,5 +1,5 @@
 """
-streamlit_app.py — NaijaCodex front-end built with Streamlit.
+streamlit_app.py — RegNaija front-end built with Streamlit.
 Upgrades: streaming responses, confidence badge, RAGAS scores in sidebar.
 """
 import re
@@ -19,7 +19,7 @@ sys.path.insert(0, ".")
 load_dotenv()
 
 st.set_page_config(
-    page_title="NaijaCodex",
+    page_title="RegNaija",
     page_icon="🏛️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -33,7 +33,7 @@ _TIME_STR = _NOW_WAT.strftime("%I:%M %p WAT, %A %d %B %Y")
 _PERIOD = "morning" if _HOUR_WAT < 12 else ("afternoon" if _HOUR_WAT < 17 else "evening")
 
 # ------- Persistence --------
-SESSIONS_FILE = Path("naijacodex_sessions.json")
+SESSIONS_FILE = Path("regnaija_sessions.json")
 
 def load_sessions():
     if SESSIONS_FILE.exists():
@@ -238,11 +238,11 @@ for k, v in {
 # ------- Pipeline -------
 @st.cache_resource(show_spinner=False)
 def load_pipeline():
-    from src.graph.rag_graph import NaijaCodexPipeline
-    return NaijaCodexPipeline()
+    from src.graph.rag_graph import RegNaijaPipeline
+    return RegNaijaPipeline()
 
 if not st.session_state.pipeline_ready:
-    with st.spinner("Loading NaijaCodex..."):
+    with st.spinner("Loading RegNaija..."):
         pipeline = load_pipeline()
         st.session_state.pipeline_ready = True
 else:
@@ -284,7 +284,7 @@ def casual_response(question: str, time_str: str, period: str, is_first: bool) -
     from langchain_core.messages import SystemMessage, HumanMessage
 
     identity = (
-        "You ARE NaijaCodex — state this with full confidence, never say 'I seem to be' or hedge your identity. "
+        "You ARE RegNaija — state this with full confidence, never say 'I seem to be' or hedge your identity. "
         "You are a Nigerian regulatory intelligence assistant. "
         "You were built by James Danas, an AI/ML Engineer based in Jos, Plateau State, Nigeria. "
         "You are NOT a product of any Lagos firm, team, or company. "
@@ -306,7 +306,7 @@ def casual_response(question: str, time_str: str, period: str, is_first: bool) -
             "never cut off mid-sentence or mid-list. "
             "You may gently steer toward Nigerian compliance topics if appropriate."
         )
-    llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.7, max_tokens=800)
+    llm = ChatGroq(model="openai/gpt-oss-20b", temperature=0.7, max_tokens=800)
     return llm.invoke([
         SystemMessage(content=system),
         HumanMessage(content=question),
@@ -371,7 +371,7 @@ def generate_followups(question: str, answer_snippet: str) -> list:
     try:
         from langchain_groq import ChatGroq
         from langchain_core.messages import SystemMessage, HumanMessage
-        llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.5, max_tokens=100)
+        llm = ChatGroq(model="openai/gpt-oss-20b", temperature=0.5, max_tokens=100)
         prompt = (
             f"User asked: {question}\nAnswer summary: {answer_snippet[:300]}\n"
             "Generate exactly 3 short follow-up questions (max 10 words each). "
@@ -417,7 +417,7 @@ with st.sidebar:
     st.markdown("""
     <div style='text-align:center;padding:8px 0;'>
       <div style='font-size:2.2rem;'>🏛️</div>
-      <h1 style='margin:0;color:#e0e0e0;font-size:1.3rem;'>NaijaCodex</h1>
+      <h1 style='margin:0;color:#e0e0e0;font-size:1.3rem;'>RegNaija</h1>
       <p style='color:#555;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'>
         Regulatory Intelligence
       </p>
@@ -538,7 +538,7 @@ with st.sidebar:
 
 # ------ MAIN --------
 st.markdown("""
-<h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>NaijaCodex</h1>
+<h1 style='text-align:center;font-size:1.8rem;margin-bottom:4px;'>RegNaija</h1>
 <p style='text-align:center;color:#555;font-size:12px;'>CBN · SEC · NDPC · NRS · NITDA</p>
 """, unsafe_allow_html=True)
 

@@ -14,9 +14,9 @@ from datetime import datetime
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from src.graph.state import NaijaCodexState
+from src.graph.state import RegNaijaState
 from src.generation.system_prompt import (
-    NAIJACODEX_SYSTEM_PROMPT,
+    REGNAIJA_SYSTEM_PROMPT,
     QUERY_DECOMPOSE_PROMPT,
 )
 from src.generation.citation_builder import (
@@ -69,7 +69,7 @@ AGENCY_KEYWORDS = {
 }
 
 
-def query_analyser(state: NaijaCodexState) -> NaijaCodexState:
+def query_analyser(state: RegNaijaState) -> RegNaijaState:
     """
     NODE 1: Analyses the query.
     - Detects which agencies are relevant
@@ -122,7 +122,7 @@ def query_analyser(state: NaijaCodexState) -> NaijaCodexState:
 # Searches Pinecone for relevant regulatory chunks
 # ---------------------------------------------------
 
-def retrieval_agent(state: NaijaCodexState, store) -> NaijaCodexState:
+def retrieval_agent(state: RegNaijaState, store) -> RegNaijaState:
     """
     NODE 2: Retrieves relevant regulatory chunks from Pinecone.
     Searches each sub-query across detected agencies.
@@ -177,7 +177,7 @@ def retrieval_agent(state: NaijaCodexState, store) -> NaijaCodexState:
 # Checks if retrieved docs contain regulatory conflicts
 # ----------------------------------------------------------
 
-def conflict_detector(state: NaijaCodexState) -> NaijaCodexState:
+def conflict_detector(state: RegNaijaState) -> RegNaijaState:
     """
     NODE 3: Detects regulatory conflicts between agencies.
     Example: CBN requires 5yr data retention but NDPC
@@ -256,7 +256,7 @@ def conflict_detector(state: NaijaCodexState) -> NaijaCodexState:
 # Generates the final answer with citations
 # ------------------------------------------------
 
-def answer_synthesiser(state: NaijaCodexState) -> NaijaCodexState:
+def answer_synthesiser(state: RegNaijaState) -> RegNaijaState:
     """
     NODE 4: Generates final answer using retrieved context.
     Incorporates conflict details if any were found.
@@ -304,7 +304,7 @@ def answer_synthesiser(state: NaijaCodexState) -> NaijaCodexState:
 
     llm      = get_llm()
     messages = [
-        SystemMessage(content=NAIJACODEX_SYSTEM_PROMPT),
+        SystemMessage(content=REGNAIJA_SYSTEM_PROMPT),
         HumanMessage(content=prompt),
     ]
     response = llm.invoke(messages)
@@ -328,7 +328,7 @@ def answer_synthesiser(state: NaijaCodexState) -> NaijaCodexState:
 # Blocks low confidence answers
 # ---------------------------------------------------
 
-def confidence_guard(state: NaijaCodexState) -> str:
+def confidence_guard(state: RegNaijaState) -> str:
     """
     CONDITIONAL EDGE: Routes based on confidence.
     Returns "pass" or "block".

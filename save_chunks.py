@@ -12,7 +12,7 @@ from src.ingestion.metadata_extractor import MetadataExtractor
 
 def generate_full_library_cache():
     print("=" * 50)
-    print("NAIJACODEX - FULL LIBRARY CACHE GENERATOR")
+    print("REGNAIJA - FULL LIBRARY CACHE GENERATOR")
     print("=" * 50)
     
     ocr = OCRProcessor()

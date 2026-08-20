@@ -1,5 +1,5 @@
 """
-app.py — NaijaCodex UI
+app.py — RegNaija UI
 """
 import warnings
 warnings.filterwarnings("ignore")
@@ -10,10 +10,10 @@ import gradio as gr
 from dotenv import load_dotenv
 load_dotenv()
 
-from src.graph.rag_graph import NaijaCodexPipeline
+from src.graph.rag_graph import RegNaijaPipeline
 
-print("Starting NaijaCodex...")
-pipeline = NaijaCodexPipeline()
+print("Starting RegNaija...")
+pipeline = RegNaijaPipeline()
 print("Ready")
 
 EXAMPLES = [
@@ -88,7 +88,7 @@ def _clean_answer(text):
     return text.strip()
 
 CASUAL_SYSTEM = (
-    "You are NaijaCodex, a warm and professional AI assistant specialising in "
+    "You are RegNaija, a warm and professional AI assistant specialising in "
     "Nigerian regulatory and compliance law (CBN, SEC, NDPC, NRS, NITDA). "
     "For greetings and small talk, respond naturally and briefly in 1-3 sentences. "
     "Do NOT use any regulatory format or cite sources for casual messages. "
@@ -98,7 +98,7 @@ CASUAL_SYSTEM = (
 
 CASUAL_TRIGGERS = [
     "hi", "hello", "hey", "good morning", "good afternoon", "good evening",
-    "how are you", "who are you", "what are you", "what is naijacodex",
+    "how are you", "who are you", "what are you", "what is regnaija",
     "thanks", "thank you", "okay", "ok", "bye", "goodbye", "great", "nice",
     "i am", "my name is", "i'm", "lol", "haha", "cool", "awesome",
     "what can you do", "help me", "what do you do",
@@ -174,7 +174,7 @@ def _casual_reply(question: str) -> str:
         max_tokens = 120,
     )
     system = (
-        "You are NaijaCodex, a warm and professional AI assistant specialising in "
+        "You are RegNaija, a warm and professional AI assistant specialising in "
         "Nigerian regulatory and compliance law covering CBN, SEC, NDPC, NRS, and NITDA. "
         "For greetings and small talk, respond naturally in 1-3 sentences only. "
         "If the user introduces themselves, greet them warmly by name. "
@@ -184,7 +184,7 @@ def _casual_reply(question: str) -> str:
     resp = llm.invoke([SystemMessage(content=system), HumanMessage(content=question)])
     return resp.content.strip()
 
-def query_naijacodex(question, history):
+def query_regnaija(question, history):
     if not question or not question.strip():
         return history, ""
     try:
@@ -381,7 +381,7 @@ body, .gradio-container {
 footer { display: none !important; }
 """
 
-with gr.Blocks(title="NaijaCodex", theme=gr.themes.Base(), css=CSS) as demo:
+with gr.Blocks(title="RegNaija", theme=gr.themes.Base(), css=CSS) as demo:
 
     sidebar_open = gr.State(True)
 
@@ -413,7 +413,7 @@ with gr.Blocks(title="NaijaCodex", theme=gr.themes.Base(), css=CSS) as demo:
         with gr.Column(scale=4):
             gr.HTML("""
             <div style='text-align:center; padding:28px 0 12px;'>
-                <h1 style='font-size:1.9rem; font-weight:700; margin:0;'> NaijaCodex</h1>
+                <h1 style='font-size:1.9rem; font-weight:700; margin:0;'> RegNaija</h1>
                 <p style='color:#777; font-size:13px; margin:6px 0 0;'>Nigerian Regulatory Intelligence Platform</p>
                 <p style='color:#444; font-size:11px; margin:4px 0 0;'>CBN · SEC · NDPC · NRS · NITDA</p>
             </div>
@@ -450,7 +450,7 @@ with gr.Blocks(title="NaijaCodex", theme=gr.themes.Base(), css=CSS) as demo:
     # Events 
 
     def respond(question, history):
-        h, q = query_naijacodex(question, history)
+        h, q = query_regnaija(question, history)
         return h, q, _build_sidebar_html()
 
     toggle_btn.click(

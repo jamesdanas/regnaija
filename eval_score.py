@@ -131,7 +131,7 @@ header = f"{'#':<4} {'Question':<{W}} {'Prec':>6} {'Rcll':>6} {'Avg':>6}"
 sep    = "─" * len(header)
 lines  = [
     "="*len(header),
-    "  NaijaCodex — RAGAS Evaluation Results",
+    "  RegNaija — RAGAS Evaluation Results",
     f"  {ts}  |  {len(full_results)} questions  |  {len(flagged)} flagged",
     "  Metrics: Context Precision + Context Recall",
     "  (Faithfulness excluded — requires 70b model)",

@@ -1,7 +1,7 @@
 """
 src/retrieval/embedder.py
 
-Wraps BGE-small-en-v1.5 for use across the entire NaijaCodex pipeline.
+Wraps BGE-small-en-v1.5 for use across the entire RegNaija pipeline.
 Single place to swap embedding models if needed.
 """
 
@@ -14,9 +14,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class NaijaCodexEmbedder:
+class RegNaijaEmbedder:
     """
-    Embedding wrapper for NaijaCodex.
+    Embedding wrapper for RegNaija.
     Uses BAAI/bge-small-en-v1.5 — 384 dimensions, fast, free.
     """
 

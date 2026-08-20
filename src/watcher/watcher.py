@@ -21,7 +21,7 @@ logging.basicConfig(
     level   = logging.INFO,
     format  = "%(asctime)s [WATCHER] %(levelname)s — %(message)s",
 )
-log = logging.getLogger("naijacodex.watcher")
+log = logging.getLogger("regnaija.watcher")
 
 # Registry of pages to watch 
 WATCH_TARGETS = [
@@ -119,7 +119,7 @@ class AgencyWatcher:
         self.registry = registry
         self.session  = requests.Session()
         self.session.headers.update({
-            "User-Agent": "Mozilla/5.0 NaijaCodex Research Bot"
+            "User-Agent": "Mozilla/5.0 RegNaija Research Bot"
         })
 
     def fetch_page(self) -> BeautifulSoup | None:
@@ -195,14 +195,14 @@ class DocumentIngester:
             root = str(Path(__file__).resolve().parents[2])
             if root not in sys.path:
                 sys.path.insert(0, root)
-            from src.retrieval.embedder import NaijaCodexEmbedder
-            from src.retrieval.vector_store import NaijaCodexVectorStore
+            from src.retrieval.embedder import RegNaijaEmbedder
+            from src.retrieval.vector_store import RegNaijaVectorStore
             from src.ingestion.legal_chunker import NigerianLegalChunker
             from langchain.schema import Document
 
             if not hasattr(self, "_embedder"):
-                self._embedder = NaijaCodexEmbedder()
-                self._store = NaijaCodexVectorStore(embedder=self._embedder)
+                self._embedder = RegNaijaEmbedder()
+                self._store = RegNaijaVectorStore(embedder=self._embedder)
                 self._chunker = NigerianLegalChunker()
             embedder = self._embedder
             store = self._store
@@ -237,7 +237,7 @@ class DocumentIngester:
             return False
 
 
-class NaijaCodexWatcher:
+class RegNaijaWatcher:
     """Main watcher service — orchestrates all agency watchers."""
 
     def __init__(self):
@@ -299,7 +299,7 @@ if __name__ == "__main__":
     parser.add_argument("--hours", type=int, default=24, help="Check interval in hours")
     args = parser.parse_args()
 
-    watcher = NaijaCodexWatcher()
+    watcher = RegNaijaWatcher()
     if args.once:
         summary = watcher.run_once()
         print(f"\nSummary: {summary}")

@@ -1,5 +1,5 @@
 ==============================================================================
-  NaijaCodex — RAGAS Evaluation Results
+  RegNaija — RAGAS Evaluation Results
   20260311_150104  |  10 questions  |  0 flagged
   Metrics: Context Precision + Context Recall
   (Faithfulness excluded — requires 70b model)

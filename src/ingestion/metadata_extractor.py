@@ -10,7 +10,7 @@ Zero-hallucination citations require structured metadata on every chunk:
   - What is the source URL for the audit trail?
 
 This extractor pulls all of that from the filename, folder name,
-and document text itself - so every answer NaijaCodex gives
+and document text itself - so every answer RegNaija gives
 can be traced back to a specific section of a specific document.
 """
 

@@ -1,6 +1,6 @@
 """
 src/generation/citation_builder.py
-Builds structured citations for every answer NaijaCodex produces.
+Builds structured citations for every answer RegNaija produces.
 """
 
 from dataclasses import dataclass
@@ -51,7 +51,7 @@ def build_citations(
 
 
 def format_citations(citations: List[Citation]) -> str:
-    """Formats citations into the standard NaijaCodex display format."""
+    """Formats citations into the standard RegNaija display format."""
     if not citations:
         return "No sources found."
 

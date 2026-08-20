@@ -1,4 +1,4 @@
-# NaijaCodex
+# RegNaija
 ### Nigerian Regulatory Intelligence Platform
 
 > *Ask anything about Nigerian law. Get cited, sourced answers in seconds.*
@@ -19,7 +19,7 @@
 
 ## What Is This?
 
-**NaijaCodex** is a production-grade **Retrieval-Augmented Generation (RAG)** system built specifically for Nigerian regulatory intelligence. It ingests official documents from Nigeria's top regulatory bodies, embeds them into a semantic vector store, and answers compliance questions with **zero hallucination** — every answer is grounded in cited source documents.
+**RegNaija** is a production-grade **Retrieval-Augmented Generation (RAG)** system built specifically for Nigerian regulatory intelligence. It ingests official documents from Nigeria's top regulatory bodies, embeds them into a semantic vector store, and answers compliance questions with **zero hallucination** — every answer is grounded in cited source documents.
 
 No guessing. No fabrication. Just law.
 
@@ -34,7 +34,7 @@ Nigerian compliance professionals, fintech founders, and legal practitioners fac
 - NDPC data protection obligations spread across 100+ page documents
 - No unified interface to query across agencies simultaneously
 
-**NaijaCodex fixes this.** One query. All agencies. Sourced answers.
+**RegNaija fixes this.** One query. All agencies. Sourced answers.
 
 ---
 
@@ -139,7 +139,7 @@ Runtime             Python 3.11 · CPU-only · Ubuntu 24
 
 ## Project Structure
 ```
-naijacodex/
+regnaija/
 ├── streamlit_app.py                # Streamlit UI — main entry point
 ├── eval_cache.json                 # Cached pipeline answers (10 questions)
 ├── ragas_results.json              # Full per-question scores
@@ -183,8 +183,8 @@ Groq API key (free tier works)
 
 ### Installation
 ```bash
-git clone https://github.com/jamesdanas/naijacodex.git
-cd naijacodex
+git clone https://github.com/jamesdanas/regnaija.git
+cd regnaija
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -199,7 +199,7 @@ PINECONE_ENV=your_pinecone_environment
 GROQ_API_KEY=your_groq_api_key
 LLM_MODEL=llama-3.3-70b-versatile
 EMBED_MODEL=BAAI/bge-small-en-v1.5
-PINECONE_INDEX=naijacodex
+PINECONE_INDEX=regnaija
 ```
 
 ### Run the App
@@ -220,7 +220,7 @@ Every answer is grounded in retrieved document chunks. If sufficient sources are
 The query analyser automatically detects which regulatory agencies are relevant and routes retrieval accordingly — CBN for banking, NDPC for data protection, SEC for capital markets, etc.
 
 ### Conflict Detection
-When multiple agencies have overlapping or contradictory rules, NaijaCodex flags the conflict explicitly so the user is aware of the regulatory tension.
+When multiple agencies have overlapping or contradictory rules, RegNaija flags the conflict explicitly so the user is aware of the regulatory tension.
 
 ### Conversational Awareness
 Non-regulatory messages bypass Pinecone entirely for natural, fast conversation without regulatory boilerplate.
@@ -295,7 +295,7 @@ Day 8  README polish, eval results published, deployment prep
 | Nigeria Tax Act 2025 | NRS | NRS website |
 | NITDA Overview and NDPR | NITDA | NITDA website |
 
-All documents ingested into Pinecone index `naijacodex`.
+All documents ingested into Pinecone index `regnaija`.
 
 ---
 
@@ -314,5 +314,5 @@ MIT License
 ---
 
 <div align="center">
-  <sub>Built with 🇳🇬 pride · Powered by Groq · Pinecone · LangGraph · Streamlit</sub>
+  <sub>Powered by Groq · Pinecone · LangGraph · Streamlit</sub>
 </div>

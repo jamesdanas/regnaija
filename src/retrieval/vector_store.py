@@ -1,7 +1,7 @@
 """
 src/retrieval/vector_store.py
 
-Manages all Pinecone operations for NaijaCodex.
+Manages all Pinecone operations for RegNaija.
 Stores regulatory chunks with full legal metadata.
 Retrieves using semantic search with agency filtering.
 """
@@ -11,13 +11,13 @@ import time
 from typing import List, Tuple, Optional
 from langchain_core.documents import Document
 from pinecone import Pinecone, ServerlessSpec
-from src.retrieval.embedder import NaijaCodexEmbedder
+from src.retrieval.embedder import RegNaijaEmbedder
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-class NaijaCodexVectorStore:
+class RegNaijaVectorStore:
     """
     Pinecone vector store for Nigerian regulatory documents.
 
@@ -26,9 +26,9 @@ class NaijaCodexVectorStore:
     - Full legal metadata: agency, section, date, doc_id, source_url
     """
 
-    def __init__(self, embedder: Optional[NaijaCodexEmbedder] = None):
-        self.index_name = os.getenv("PINECONE_INDEX", "naijacodex")
-        self.embedder = embedder or NaijaCodexEmbedder()
+    def __init__(self, embedder: Optional[RegNaijaEmbedder] = None):
+        self.index_name = os.getenv("PINECONE_INDEX", "regnaija")
+        self.embedder = embedder or RegNaijaEmbedder()
 
         # Connect to Pinecone
         self.pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
