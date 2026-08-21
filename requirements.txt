@@ -72,3 +72,9 @@ six
 # ── Numpy pin — CRITICAL ──────────────────────────────────────────
 # sentence-transformers breaks silently on numpy 2.x
 numpy<2.0
+
+# ── Streamlit Cloud compatibility ─────────────────────────────────
+# ragas pulls datasets==2.14.4 which uses pa.PyExtensionType
+# removed in pyarrow 14+. Pin both to compatible versions.
+datasets>=2.18.0
+pyarrow>=14.0.0,<25
