@@ -199,7 +199,7 @@ PINECONE_ENV=your_pinecone_environment
 GROQ_API_KEY=your_groq_api_key
 LLM_MODEL=llama-3.3-70b-versatile
 EMBED_MODEL=BAAI/bge-small-en-v1.5
-PINECONE_INDEX=regnaija
+PINECONE_INDEX=naijacodex
 ```
 
 ### Run the App
