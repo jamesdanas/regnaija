@@ -4,7 +4,7 @@ LangGraph pipeline for RegNaija.
 Connects all nodes into a stateful agentic workflow.
 """
 
-from functools import partial
+
 from langgraph.graph import StateGraph, END
 
 from src.graph.state import RegNaijaState
@@ -53,7 +53,7 @@ def build_graph(store: RegNaijaVectorStore) -> StateGraph:
 
     # Add nodes
     graph.add_node("query_analyser", query_analyser)
-    graph.add_node("retrieval_agent", partial(retrieval_agent, store=store))
+    graph.add_node("retrieval_agent", lambda state: retrieval_agent(state, store=store))
     graph.add_node("conflict_detector", conflict_detector)
     graph.add_node("answer_synthesiser",answer_synthesiser)
     graph.add_node("blocked_response", blocked_response)

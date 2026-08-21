@@ -1605,5 +1605,424 @@
         "meta": null
       }
     ]
+  },
+  {
+    "id": "33",
+    "title": "Hello",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Good afternoon! I am RegNaija, your Nigerian regulatory intelligence assistant, created by James Danas, an AI/ML Engineer in Jos, Nigeria. How can I assist you with compliance today? ",
+        "meta": null
+      }
+    ]
+  },
+  {
+    "id": "34",
+    "title": "NRS tax filing penalties for late returns?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "CBN cybersecurity requirements for fintechs?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search_multi_agency' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Data protection obligations under NDPC 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "I’m RegNaija, a Nigerian regulatory intelligence assistant built by James Danas, an AI/ML Engineer in Jos, Nigeria. How can I help you today? ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "SEC capital requirements for stockbrokers?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Rights of data subjects under NDPA 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "I couldn't find a relevant answer. Please try rephrasing your question. ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "NRS tax filing penalties for late returns?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      }
+    ]
+  },
+  {
+    "id": "35",
+    "title": "How are you?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Good afternoon! I’m RegNaija, your Nigerian regulatory intelligence assistant. How can I assist you with a compliance question today? ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "CBN cybersecurity requirements for fintechs?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search_multi_agency' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Data protection obligations under NDPC 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "How are you?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "I’m functioning optimally, thank you. How can I assist you today? ",
+        "meta": null
+      }
+    ]
+  },
+  {
+    "id": "36",
+    "title": "NRS tax filing penalties for late returns?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Good morning, it’s Friday, 21 August 2026, 11:21 AM WAT. I’m RegNaija, your Nigerian regulatory intelligence assistant. How can I help you with a compliance question today? ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "CBN cybersecurity requirements for fintechs?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search_multi_agency' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Data protection obligations under NDPC 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "NRS tax filing penalties for late returns?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      }
+    ]
+  },
+  {
+    "id": "37",
+    "title": "Data protection obligations under NDPC 2023?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Good morning! I am RegNaija, your Nigerian regulatory intelligence assistant. How can I help you with a compliance question today? ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "CBN cybersecurity requirements for fintechs?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search_multi_agency' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Data protection obligations under NDPC 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      }
+    ]
+  },
+  {
+    "id": "38",
+    "title": "NRS tax filing penalties for late returns?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Good morning! I am RegNaija, a Nigerian regulatory intelligence assistant. How can I help you with a compliance question today? ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "CBN cybersecurity requirements for fintechs?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search_multi_agency' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Data protection obligations under NDPC 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "NRS tax filing penalties for late returns?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      }
+    ]
+  },
+  {
+    "id": "39",
+    "title": "NRS tax filing penalties for late returns?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Good morning! I am RegNaija, your Nigerian regulatory intelligence assistant, created by James Danas, an AI/ML Engineer in Jos, Nigeria. How can I assist you with your compliance needs today? ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "CBN cybersecurity requirements for fintechs?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search_multi_agency' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Data protection obligations under NDPC 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "NRS tax filing penalties for late returns?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: 'NoneType' object has no attribute 'search' ",
+        "meta": null
+      }
+    ]
+  },
+  {
+    "id": "40",
+    "title": "Data protection obligations under NDPC 2023?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Good afternoon! I am RegNaija, a Nigerian regulatory intelligence assistant built by James Danas, an AI/ML Engineer in Jos, Nigeria. How can I help you with compliance today? ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "CBN cybersecurity requirements for fintechs?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: Error code: 404 - {'error': {'message': 'The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}} ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "Data protection obligations under NDPC 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Something went wrong: Error code: 404 - {'error': {'message': 'The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}} ",
+        "meta": null
+      }
+    ]
+  },
+  {
+    "id": "41",
+    "title": "Data protection obligations under NDPC 2023?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "Good afternoon! I am RegNaija, a Nigerian regulatory intelligence assistant built by James Danas, an AI/ML Engineer in Jos, Nigeria. How can I help you with compliance today? ",
+        "meta": null
+      },
+      {
+        "role": "user",
+        "content": "CBN cybersecurity requirements for fintechs?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "**Direct Answer**\nFintechs participating in open‑banking must comply with the CBN’s extant Risk‑Based Cybersecurity Frameworks (for Deposit Money Banks, Payment Service Providers and Other Financial Institutions), adopt robust governance, risk‑management and audit controls, implement secure API and application development practices, protect data through classification, retention and loss‑prevention measures, and promptly report any cyber‑threats to the CBN.\n\n**Regulatory Basis**\n- **Governance & Compliance** – Participants shall “ensure compliance with the provisions of the extant CBN Risk‑based Cybersecurity Framework and Guidelines for Deposit Money Banks and Payment Service Providers and CBN Risk‑based Cybersecurity Framework and Guidelines for Other Financial Institutions (OFIs)” and “develop, maintain, and implement security policies that ensure authorised and secure connection and disconnection of APIs”【SOURCE: CBN Open Banking Policy for Nigeria | CBN | Section 3.0 | 2023‑01‑01】.  \n- **Risk Management** – Adopt the practices defined in Appendix II (Risk Management Standards)【SOURCE: CBN Open Banking Policy for Nigeria | CBN | Section 3.0 | 2023‑01‑01】.  \n- **Audit & Monitoring** – All compliance requirements (data flow, privacy, internal controls, reporting, etc.) must be identified, assessed, documented and monitored【SOURCE: CBN Open Banking Policy for Nigeria | CBN | Section 3.0 | 2023‑01‑01】.  \n- **Data Loss Prevention** – Apply data classification and labelling, protect personal/transactional data, and maintain data‑retention and destruction policies in line with NDPR and CBN regulations【SOURCE: CBN Open Banking Policy for Nigeria | CBN | Section 5.2 | 2023‑01‑01】.  \n- **Threat Reporting** – Promptly report all impending or challenging cyber‑threats to the Director of Banking Supervision using the prescribed Cyber‑threat Intelligence Reporting template【SOURCE: CBN Cybersecurity Framework for Nigerian Banking Sector | CBN | Section 4.3.5 | 2021‑01‑01】.  \n- **Technical Standards** – Comply with the Nigeria Financial Services Industry IT Standards Blueprint, use secure protocols, and follow a secure application development lifecycle【SOURCE: CBN Open Banking Policy for Nigeria | CBN | Section 2.1 | 2023‑01‑01】.  \n- **Data Privacy** – Safeguard customer data in line with the NDPR and any CBN data‑privacy regulation; do not use data beyond the expressly authorised service【SOURCE: CBN Open Banking Policy for Nigeria | CBN | Section 9.0 | 2023‑01‑01】.  \n- **Overall Security Expectation** – Participants shall “adhere strictly to security standards when accessing and storing data” and meet minimum privacy, operational, risk‑management and ",
+        "meta": {
+          "citations": "[1] CBN Open Banking Policy for Nigeria | CBN | Section 3.0 | 2023-01-01\n 🔗 https://www.cbn.gov.ng/Out/2023/CCD/Operational%20Guidelines%20for%20Open%20Banking%20in%20Nigeria.pdf\n[2] CBN Open Banking Policy for Nigeria | CBN | Section 5.2 | 2023-01-01\n 🔗 https://www.cbn.gov.ng/Out/2023/CCD/Operational%20Guidelines%20for%20Open%20Banking%20in%20Nigeria.pdf\n[3] CBN Cybersecurity Framework for Nigerian Banking Sector | CBN | Section 4.3.5. | 2021-01-01\n 🔗 https://www.cbn.gov.ng/Out/2024/BSD/CBN%20Risk-Based%20Cybersecurity%20Framework%20for%20DMBs%20and%20PSBs_2024.pdf\n[4] CBN Open Banking Policy for Nigeria | CBN | Section 2.1 | 2023-01-01\n 🔗 https://www.cbn.gov.ng/Out/2023/CCD/Operational%20Guidelines%20for%20Open%20Banking%20in%20Nigeria.pdf\n[5] CBN Open Banking Policy for Nigeria | CBN | Section 9.0 | 2023-01-01\n 🔗 https://www.cbn.gov.ng/Out/2023/CCD/Operational%20Guidelines%20for%20Open%20Banking%20in%20Nigeria.pdf\n[6] CBN Open Banking Policy for Nigeria | CBN | Section 9.2 | 2023-01-01\n 🔗 https://www.cbn.gov.ng/Out/2023/CCD/Operational%20Guidelines%20for%20Open%20Banking%20in%20Nigeria.pdf\n[7] Download Full Document | SEC | Section 1. | 2026-03-08\n 🔗 https://home.sec.gov.ng/documents/17/SEC-New-Rules-and-Ammendments-23-December-2019.pdf",
+          "confidence": "HIGH — Direct match found in regulatory documents",
+          "agencies_searched": [
+            "CBN",
+            "SEC"
+          ],
+          "chunks": 8,
+          "query_id": "NCX-360F6E53",
+          "latency_ms": 14887,
+          "conflict": false
+        }
+      },
+      {
+        "role": "user",
+        "content": "What are the penalties for non-compliance?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "**Direct Answer**\nNon‑compliance attracts monetary fines and other sanctions. Under the SEC rules, violators face a minimum fine of N1,000,000 plus a daily default charge (up to N25,000 per day). The SEC’s Investments and Securities Act also imposes a N1,000,000 fine and a daily penalty of at least N50,000 for continued breach. For CBN‑regulated matters, the Central Bank may impose “appropriate sanctions” as determined under the CBN Act and the Banks and Other Financial Institutions Act (BOFIA), which can include fines, licence restrictions or other enforcement actions.\n\n**Regulatory Basis**\n- **SEC – General Sanctions**: “Any person who violates any provision of these rules and regulations shall be liable to a penalty of not less than N1,000,000 and a further sum of not more than N25,000 for every day of default.”  \n- **SEC – Investments and Securities Act 2007 (Sec. 29(3))**: “…shall be liable to a penalty of N1,000,000 and a further penalty of not less than N50,000 for every day during which the non‑compliance continues.”  \n- **CBN – Cybersecurity Framework (Sec. 6.3)**: “Non‑compliance with the provisions of this framework shall attract appropriate sanctions as may be determined by the Central Bank of Nigeria in accordance with the provisions of the CBN Act and BOFIA.”  \n- **CBN – Mobile Payments Regulatory Framework (Sec. 6.4.13)**: “Non‑compliance with the provisions of this regulatory framework shall attract appropriate sanctions as may be determined by the Central Bank of Nigeria.”  \n- **CBN – Consumer Protection Framework (Sec. 7.6)**: “Failure to comply … shall attract sanctions provided in the CBN Act, the BOFIA, other enabling laws and regulations.” ",
+        "meta": {
+          "citations": "[1] CBN Cybersecurity Framework for Nigerian Banking Sector | CBN | Section 6.3. | 2021-01-01\n 🔗 https://www.cbn.gov.ng/Out/2024/BSD/CBN%20Risk-Based%20Cybersecurity%20Framework%20for%20DMBs%20and%20PSBs_2024.pdf\n[2] CBN Regulatory Framework for Mobile Payments Services in Nigeria | CBN | Section 6.4.13 | 2015-01-01\n 🔗 https://www.cbn.gov.ng/PaymentsSystem/\n[3] CBN Open Banking Policy for Nigeria | CBN | Section 2.4 | 2023-01-01\n 🔗 https://www.cbn.gov.ng/Out/2023/CCD/Operational%20Guidelines%20for%20Open%20Banking%20in%20Nigeria.pdf\n[4] CBN Consumer Protection Framework | CBN | Section 7.6 | 2016-01-01\n 🔗 https://www.cbn.gov.ng/documents/consumerprotection.asp\n[5] Download Full Document | SEC | Section 1. | 2026-03-08\n 🔗 https://home.sec.gov.ng/documents/17/SEC-New-Rules-and-Ammendments-23-December-2019.pdf\n[6] Investments and Securities Act 2007 | SEC | Section section 29 | 2007-01-01\n 🔗 https://home.sec.gov.ng/our-mandate/regulation/rules-and-regulations/\n[7] Investments and Securities Act 2007 | SEC | Section PART IV | 2007-01-01\n 🔗 https://home.sec.gov.ng/our-mandate/regulation/rules-and-regulations/\n[8] CBN Open Banking Policy for Nigeria | CBN | Section 5.2 | 2023-01-01\n 🔗 https://www.cbn.gov.ng/Out/2023/CCD/Operational%20Guidelines%20for%20Open%20Banking%20in%20Nigeria.pdf",
+          "confidence": "HIGH — Direct match found in regulatory documents",
+          "agencies_searched": [
+            "CBN",
+            "SEC",
+            "NDPC",
+            "NRS",
+            "NITDA"
+          ],
+          "chunks": 8,
+          "query_id": "NCX-B7B2A2C8",
+          "latency_ms": 15408,
+          "conflict": false
+        }
+      },
+      {
+        "role": "user",
+        "content": "Data protection obligations under NDPC 2023?",
+        "meta": null
+      },
+      {
+        "role": "assistant",
+        "content": "**Direct Answer**\nUnder the Nigeria Data Protection Act 2023, data controllers must (1) process personal data only on a lawful basis, (2) respect data‑subject rights such as access, rectification and erasure, (3) retain data only for the permitted period (unless another law requires longer retention), (4) notify breaches to the controller, (5) avoid cross‑border transfers unless the destination provides adequate protection, and (6) face fines of at least N2 million for unlawful retention.\n\n**Regulatory Basis**\n- **Lawful processing:** Personal data may be processed only if the data subject consents, the processing is necessary for contract performance, legal compliance, or protection of vital interests.  \n- **Data‑subject rights:** Every data subject is entitled to be informed, to access, to request rectification, erasure where unlawful, and to object to processing.  \n- **Retention limits:** Retaining data beyond the permitted period incurs a fine of not less than N2 million, unless a longer period is required by another law.  \n- **Breach notification:** When a breach occurs, the data processor must promptly notify the data controller, describing the breach and affected records.  \n- **Cross‑border transfer:** Personal data may not be transferred abroad unless the receiving country ensures an adequate level of protection. ",
+        "meta": {
+          "citations": "[1] Nigeria Data Protection Act 2023 | NDPC | Section 5.3 | 2023-06-14\n 🔗 https://ndpc.gov.ng/download/nigeria-data-protection-act-2023\n[2] Nigeria Data Protection Act 2023 | NDPC | Section 5.2 | 2023-06-14\n 🔗 https://ndpc.gov.ng/download/nigeria-data-protection-act-2023\n[3] Nigeria Data Protection Act 2023 | NDPC | Section 4.1 | 2023-06-14\n 🔗 https://ndpc.gov.ng/download/nigeria-data-protection-act-2023\n[4] Nigeria Data Protection Act 2023 | NDPC | Section  | \n[5] Nigeria Data Protection Act 2023 | NDPC | Section 9.1 | 2023-06-14\n 🔗 https://ndpc.gov.ng/download/nigeria-data-protection-act-2023\n[6] Nigeria Data Protection Act 2023 | NDPC | Section 3.1 | 2023-06-14\n 🔗 https://ndpc.gov.ng/download/nigeria-data-protection-act-2023\n[7] Nigeria Data Protection Act 2023 | NDPC | Section Section 2. | 2023-06-14\n 🔗 https://ndpc.gov.ng/download/nigeria-data-protection-act-2023\n[8] Nigeria Data Protection Act 2023 | NDPC | Section 6.2 | 2023-06-14\n 🔗 https://ndpc.gov.ng/download/nigeria-data-protection-act-2023",
+          "confidence": "MEDIUM — Related provisions found, verify with sources",
+          "agencies_searched": [
+            "NDPC"
+          ],
+          "chunks": 8,
+          "query_id": "NCX-2B9603CC",
+          "latency_ms": 3673,
+          "conflict": false
+        }
+      }
+    ]
   }
 ]

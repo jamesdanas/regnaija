@@ -31,7 +31,7 @@ load_dotenv()
 
 def get_llm():
     return ChatGroq(
-        model = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+        model = os.getenv("LLM_MODEL", "openai/gpt-oss-120b"),
         temperature = 0,
         max_tokens = 1024,
     )

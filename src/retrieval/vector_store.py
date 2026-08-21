@@ -27,7 +27,7 @@ class RegNaijaVectorStore:
     """
 
     def __init__(self, embedder: Optional[RegNaijaEmbedder] = None):
-        self.index_name = os.getenv("PINECONE_INDEX", "regnaija")
+        self.index_name = os.getenv("PINECONE_INDEX", "naijacodex")
         self.embedder = embedder or RegNaijaEmbedder()
 
         # Connect to Pinecone
