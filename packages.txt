@@ -1,0 +1,6 @@
+tesseract-ocr
+tesseract-ocr-eng
+poppler-utils
+libxml2-dev
+libxslt1-dev
+zlib1g-dev
